@@ -1,24 +1,28 @@
-﻿using Otc.ProjectModel.Core.Domain.Exceptions;
+﻿using Otc.ComponentModel.DataAnnotations;
+using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Otc.ProjectModel.Core.Domain.Models
 {
-    public class Client : Entity
+    public class Client
     {
         private IList<Subscription> _subscriptions;
 
-        public string Name { get; private set; }
-        public Email Email { get; private set; }
-        public Address Address { get; private set; }
-        public IReadOnlyCollection<Subscription> Subscriptions { get { return _subscriptions.ToArray(); } }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        public Client(string name, Email email, Address address)
+        [Required(ErrorKey = "400.010")]
+        [MinLength(3, ErrorKey = "400.011")]
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
+        public Address Address { get; set; }
+
+        public Client()
         {
-            Name = name;
-            Email = email;
-            Address = address;
             _subscriptions = new List<Subscription>();
         }
 
@@ -33,7 +37,15 @@ namespace Otc.ProjectModel.Core.Domain.Models
             if (hasSubscriptionActive)
                 throw new ClientCoreException().AddError(ClientCoreError.SubscriptionError);
 
+            if (!subscription.Payments.Any())
+                throw new SubscriptionCoreException().AddError(SubscriptionCoreError.PaymentNotFound);
+
             _subscriptions.Add(subscription);
+        }
+
+        public bool HasSubscription()
+        {
+            return _subscriptions.Any();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 {
     public class PayPalPayment : Payment
     {
-        public PayPalPayment(string transactionCode, DateTime paidDate, DateTime expireDate, decimal total, decimal totalPaid, string payer, Address address, Email email) : base(paidDate, expireDate, total, totalPaid, payer, address, email)
+        public PayPalPayment(string transactionCode, DateTime paidDate, DateTime expireDate, decimal total, decimal totalPaid, string payer, Address address) : base(paidDate, expireDate, total, totalPaid, payer, address)
         {
             TransactionCode = transactionCode;
         }

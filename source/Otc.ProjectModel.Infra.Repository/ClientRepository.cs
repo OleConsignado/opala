@@ -21,7 +21,7 @@ namespace Otc.ProjectModel.Infra.Repository
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", client.Id, DbType.Guid);
             clientParams.Add("Nome", client.Name, DbType.AnsiString);
-            clientParams.Add("Email", client.Email.Address, DbType.AnsiString);
+            clientParams.Add("Email", client.Email, DbType.AnsiString);
 
             var addressParams = new DynamicParameters();
             addressParams.Add("Address.ClientId", client.Id, DbType.Guid);

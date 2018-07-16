@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Adapters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Otc.ComponentModel.Annotations" Version="1.0.1" />
     <PackageReference Include="Otc.DomainBase.Exceptions" Version="1.0.2" />
   </ItemGroup>

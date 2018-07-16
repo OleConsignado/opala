@@ -4,9 +4,10 @@ using System.Linq;
 
 namespace Otc.ProjectModel.Core.Domain.Models
 {
-    public class Subscription : Entity
+    public class Subscription
     {
         private IList<Payment> _payments;
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public Subscription(DateTime? expireDate)
         {

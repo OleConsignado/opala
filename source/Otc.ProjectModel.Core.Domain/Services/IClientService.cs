@@ -9,6 +9,5 @@ namespace Otc.ProjectModel.Core.Domain.Services
         void AddClient(Client client);
         void RemoveClient(Guid cliendId);
         void UpdateClient(Client client);
-        void AddClientSubscription(Guid clientId, Subscription subscription);
     }
 }

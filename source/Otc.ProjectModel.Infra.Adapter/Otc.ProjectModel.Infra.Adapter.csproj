@@ -2,13 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Equipe Arquitetura</Authors>
-    <Company>Olé Consigando</Company>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Otc.Validations.Helpers" Version="1.0.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Otc.ProjectModel.Core.Domain\Otc.ProjectModel.Core.Domain.csproj" />

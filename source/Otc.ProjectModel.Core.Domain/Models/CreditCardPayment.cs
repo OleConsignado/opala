@@ -5,7 +5,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 {
     public class CreditCardPayment : Payment
     {
-        public CreditCardPayment(string cardHolderName, string cardNumber, string lastTransactionNumber, DateTime paidDate, DateTime expireDate, decimal total, decimal totalPaid, string payer, Address address, Email email) : base(paidDate, expireDate, total, totalPaid, payer, address, email)
+        public CreditCardPayment(string cardHolderName, string cardNumber, string lastTransactionNumber, DateTime paidDate, DateTime expireDate, decimal total, decimal totalPaid, string payer, Address address) : base(paidDate, expireDate, total, totalPaid, payer, address)
         {
             CardHolderName = cardHolderName;
             CardNumber = cardNumber;

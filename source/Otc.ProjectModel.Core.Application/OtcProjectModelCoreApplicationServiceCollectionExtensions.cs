@@ -7,7 +7,7 @@ namespace Otc.ProjectModel.Core.Application
 {
     public static class OtcProjectModelCoreApplicationServiceCollectionExtensions
     {
-        public static IServiceCollection AddOtcProjectModelCoreApplication(this IServiceCollection services)
+        public static IServiceCollection AddProjectModelCoreApplication(this IServiceCollection services)
         {
             if (services == null)
             {
