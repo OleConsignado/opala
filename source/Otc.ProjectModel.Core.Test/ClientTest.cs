@@ -7,6 +7,7 @@ using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.Core.Domain.ValueObjects;
+using Otc.ProjectModel.Core.Test.Mock;
 using System;
 using Xunit;
 
@@ -18,6 +19,7 @@ namespace Otc.ProjectModel.Core.Test
         private IClientService clientService;
         private Address address;
         private Client client;
+        private Guid clientId = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188");
 
         public ClientTest()
         {
@@ -42,11 +44,12 @@ namespace Otc.ProjectModel.Core.Test
             };
 
             var emailAdapter = new Mock<IEmailAdapter>();
-            var clientRepository = new Mock<IClientRepository>();
 
             services.AddLogging();
 
-            services.AddScoped(c => clientRepository.Object);
+            services.AddScoped<IClientRepository, FakeClientRepository>();
+            services.AddScoped<IEmailAdapter, FakeEmailAdapter>();
+
             services.AddScoped(c => emailAdapter.Object);
 
             services.AddProjectModelCoreApplication();
@@ -56,7 +59,7 @@ namespace Otc.ProjectModel.Core.Test
             clientService = serviceProvider.GetService<IClientService>();
         }
 
-        #region -- Client model test --
+        #region -- Client --
         [Fact]
         public void Add_Client_Success()
         {
@@ -113,6 +116,28 @@ namespace Otc.ProjectModel.Core.Test
 
             Assert.Throws<SubscriptionCoreException>(() => client.AddSubscription(subscription));
         }
+
+        [Fact]
+        public void Get_Client_By_ClientId()
+        {
+            var client = clientService.GetClient(clientId);
+
+            Assert.NotNull(client);
+            Assert.IsType<Client>(client);
+            Assert.Equal("Luciano", client.Name);
+        }
+
+        [Fact]
+        public void Get_Client_By_Id_Not_Found()
+        {
+            clientId = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21189");
+
+            var client = clientService.GetClient(clientId);
+
+            Assert.Null(client);
+        }
+
         #endregion
+
     }
 }

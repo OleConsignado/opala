@@ -1,5 +1,4 @@
 ﻿using Otc.ProjectModel.Core.Domain.Adapters;
-using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
@@ -24,14 +23,13 @@ namespace Otc.ProjectModel.Core.Application.Services
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
             _clientRepository.AddClient(client);
+
+            _emailService.Send(client.Email, "origem@teste.com", "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
         }
 
         public Client GetClient(Guid clientId)
         {
             var client = _clientRepository.GetClient(clientId);
-
-            if (client == null)
-                throw new ClientCoreException().AddError(ClientCoreError.ClientNotFound);
 
             return client;
         }

@@ -44,7 +44,7 @@ namespace Otc.ProjectModel.Infra.Repository
             }
         }
 
-        public void AddClientSubscription(Client client)
+        public void AddClientSubscription(Guid clientId, Subscription subscription)
         {
             throw new NotImplementedException();
         }
