@@ -2,6 +2,6 @@
 {
     public interface IEmailAdapter
     {
-        void Send(string to, string from, string subject, string body);
+        bool Send(string to, string from, string subject, string body);
     }
 }
