@@ -3,6 +3,7 @@ using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
 using System.Data;
+using System.Linq;
 using System.Transactions;
 
 namespace Otc.ProjectModel.Infra.Repository
@@ -44,17 +45,47 @@ namespace Otc.ProjectModel.Infra.Repository
             }
         }
 
-        public void AddClientSubscription(Guid clientId, Subscription subscription)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool EmailExists(string email)
-        {
-            throw new NotImplementedException();
-        }
-
         public Client GetClient(Guid clientId)
+        {
+            var clientParams = new DynamicParameters();
+            clientParams.Add("Id", clientId, DbType.Guid);
+
+            var query = @"SELECT ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode FROM Clients Where ClientId = @ClientId";
+
+            var client = _dbConnection.Query<Client>(query, clientParams).SingleOrDefault();
+
+            return client;
+        }
+
+        public void RemoveClient(Guid clientId)
+        {
+            var clientParams = new DynamicParameters();
+            clientParams.Add("Id", clientId, DbType.Guid);
+
+            var deleteAddress = @"DELETE FROM Address WHERE ClientId = @ClientId";
+            var deletePayments = @"DELETE FROM Payments WHERE SubscriptionId = @SubscriptionId";
+            var deleteSubscriptions = @"DELETE FROM Subscriptions WHERE ClientId = @ClientId";
+            var deleteClient = @"DELETE FROM Clients WHERE ClientId = @ClientId";
+
+            var selectSubscritionsId = @"SELECT SubscritionId WHERE ClientId = @ClientID";
+
+            using (var trans = _dbConnection.BeginTransaction())
+            {
+
+                var subscritionsId = _dbConnection.Query<Guid>(selectSubscritionsId).ToList();
+
+                foreach (var subId in subscritionsId)
+                    _dbConnection.Execute(deletePayments, new { Number = subId });
+
+                _dbConnection.Execute(deleteSubscriptions, clientParams);
+                _dbConnection.Execute(deleteAddress, clientParams);
+                _dbConnection.Execute(deleteClient, clientParams);
+
+                trans.Commit();
+            }
+        }
+
+        public void UpdateClient(Client client)
         {
             throw new NotImplementedException();
         }

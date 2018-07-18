@@ -1,27 +1,20 @@
-﻿using Otc.ProjectModel.Core.Domain.ValueObjects;
-using System;
+﻿using System;
 
 namespace Otc.ProjectModel.Core.Domain.Models
 {
     public abstract class Payment
     {
-        public string Number { get; private set; }
-        public DateTime PaidDate { get; private set; }
-        public DateTime ExpireDate { get; private set; }
-        public decimal Total { get; private set; }
-        public decimal TotalPaid { get; private set; }
-        public string Payer { get; private set; }
-        public Address Address { get; private set; }
+        public string Number { get; set; }
+        public DateTime PaidDate { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public decimal Total { get; set; }
+        public decimal TotalPaid { get; set; }
+        public string Payer { get; set; }
+        public Address Address { get; set; }
 
-        public Payment(DateTime paidDate, DateTime expireDate, decimal total, decimal totalPaid, string payer, Address address)
+        public Payment()
         {
             Number = Guid.NewGuid().ToString().Replace("-", "");
-            PaidDate = paidDate;
-            ExpireDate = expireDate;
-            Total = total;
-            TotalPaid = totalPaid;
-            Payer = payer;
-            Address = address;
         }
     }
 }

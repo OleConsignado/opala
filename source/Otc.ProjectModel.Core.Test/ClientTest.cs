@@ -2,11 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Otc.ProjectModel.Core.Application;
 using Otc.ProjectModel.Core.Domain.Adapters;
-using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
-using Otc.ProjectModel.Core.Domain.ValueObjects;
 using Otc.ProjectModel.Core.Test.Mock;
 using System;
 using Xunit;
@@ -17,6 +15,9 @@ namespace Otc.ProjectModel.Core.Test
     {
         private IServiceProvider serviceProvider;
         private IClientService clientService;
+        private ISubscriptionService subscriptionService;
+        private IPaymentService paymentService;
+
         private Address address;
         private Client client;
         private Guid clientId = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188");
@@ -57,6 +58,9 @@ namespace Otc.ProjectModel.Core.Test
             serviceProvider = services.BuildServiceProvider();
 
             clientService = serviceProvider.GetService<IClientService>();
+            subscriptionService = serviceProvider.GetService<ISubscriptionService>();
+            paymentService = serviceProvider.GetService<IPaymentService>();
+
         }
 
         #region -- Client --
@@ -84,38 +88,55 @@ namespace Otc.ProjectModel.Core.Test
         [Fact]
         public void Add_Client_Subscription()
         {
-            var subscription = new Subscription(null);
-            var payment = new PayPalPayment("12345678", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, "Tabajara Company", address);
+            var subscription = new Subscription
+            {
+                Active = true,
+                CreateDate = DateTime.Now,
+                ExpireDate = DateTime.Now.AddDays(10),
+                LastUpdateDate = null
+            };
 
-            subscription.AddPayment(payment);
+            var payment = new PayPalPayment
+            {
+                Number = "654897",
+                TransactionCode = "12345678",
+                PaidDate = DateTime.Now,
+                ExpireDate = DateTime.Now.AddDays(5),
+                Total = 10,
+                TotalPaid = 10,
+                Payer = "Tabajara Company",
+                Address = address
+            };
 
-            client.AddSubscription(subscription);
+            subscription.Payments.Add(payment);
+
+            subscriptionService.AddSubscription(client, subscription);
 
             Assert.True(client.HasSubscription());
         }
 
-        [Fact]
-        public void Throw_Exception_When_Try_Add_Two_Client_Subscription()
-        {
-            var subscription = new Subscription(null);
-            var payment = new PayPalPayment("12345678", DateTime.Now, DateTime.Now.AddDays(5), 10, 10, "Tabajara Company", address);
+        //[Fact]
+        //public void Throw_Exception_When_Try_Add_Two_Client_Subscription()
+        //{
+        //    var subscription = new Subscription
+        //    {
+        //        Active = true,
+        //        CreateDate = DateTime.Now,
+        //        ExpireDate = DateTime.Now.AddDays(10),
+        //    };
 
-            subscription.AddPayment(payment);
 
-            client.AddSubscription(subscription);
+        //    subscriptionService.AddSubscription(client, subscription);
 
-            subscription = new Subscription(DateTime.Now.AddDays(1));
+        //    subscription = new Subscription
+        //    {
+        //        Active = true,
+        //        CreateDate = DateTime.Now,
+        //        ExpireDate = DateTime.Now.AddDays(1),
+        //    };
 
-            Assert.Throws<ClientCoreException>(() => client.AddSubscription(subscription));
-        }
-
-        [Fact]
-        public void Throw_Exception_When_Try_Add_Client_Subscription_Whitou_Payment()
-        {
-            var subscription = new Subscription(null);
-
-            Assert.Throws<SubscriptionCoreException>(() => client.AddSubscription(subscription));
-        }
+        //    Assert.Throws<ClientCoreException>(() => subscriptionService.AddSubscription(client, subscription));
+        //}
 
         [Fact]
         public void Get_Client_By_ClientId()

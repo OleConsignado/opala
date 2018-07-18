@@ -1,7 +1,5 @@
-﻿using Otc.ProjectModel.Core.Domain.Exceptions;
-using Otc.ProjectModel.Core.Domain.Models;
+﻿using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
-using Otc.ProjectModel.Core.Domain.ValueObjects;
 using System;
 
 namespace Otc.ProjectModel.Core.Test.Mock
@@ -12,13 +10,6 @@ namespace Otc.ProjectModel.Core.Test.Mock
         {
             if (client == null)
                 throw new NullReferenceException();
-        }
-
-        public void AddClientSubscription(Guid clientId, Subscription subscription)
-        {
-            var client = GetClient(Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"));
-
-            client.AddSubscription(subscription);
         }
 
         public Client GetClient(Guid clientId)
@@ -44,6 +35,16 @@ namespace Otc.ProjectModel.Core.Test.Mock
             }
 
             return null;
+        }
+
+        public void RemoveClient(Guid clientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateClient(Client client)
+        {
+            throw new NotImplementedException();
         }
     }
 }

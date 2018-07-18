@@ -7,6 +7,7 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
     {
         void AddClient(Client client);
         Client GetClient(Guid clientId);
-        void AddClientSubscription(Guid clientId, Subscription subscription);
+        void RemoveClient(Guid clientId);
+        void UpdateClient(Client client);
     }
 }
