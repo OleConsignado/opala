@@ -34,8 +34,8 @@ namespace Otc.ProjectModel.Infra.Repository
             addressParams.Add("Address.Country", client.Address.Country, DbType.AnsiString);
             addressParams.Add("Address.ZipCode", client.Address.ZipCode, DbType.AnsiString);
 
-            var queryClient = @"INSERT INTO CLIENT (Id, Name, Email) VALUES (@Id, @Name, @Email)";
-            var queryClientAddress = @"INSERT INTO ADDRESS (ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode) VALUES (@ClientId, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode)";
+            var queryClient = @"INSERT INTO Client (Id, Name, Email) VALUES (@Id, @Name, @Email)";
+            var queryClientAddress = @"INSERT INTO Address (ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode) VALUES (@ClientId, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode)";
 
             using (var trans = new TransactionScope())
             {
@@ -87,7 +87,30 @@ namespace Otc.ProjectModel.Infra.Repository
 
         public void UpdateClient(Client client)
         {
-            throw new NotImplementedException();
+            var clientParams = new DynamicParameters();
+            clientParams.Add("Id", client.Id, DbType.Guid);
+            clientParams.Add("Nome", client.Name, DbType.AnsiString);
+            clientParams.Add("Email", client.Email, DbType.AnsiString);
+
+            var addressParams = new DynamicParameters();
+            addressParams.Add("Address.ClientId", client.Id, DbType.Guid);
+            addressParams.Add("Address.Street", client.Address.Street, DbType.AnsiString);
+            addressParams.Add("Address.Number", client.Address.Number, DbType.AnsiString);
+            addressParams.Add("Address.Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
+            addressParams.Add("Address.City", client.Address.City, DbType.AnsiString);
+            addressParams.Add("Address.State", client.Address.State, DbType.AnsiString);
+            addressParams.Add("Address.Country", client.Address.Country, DbType.AnsiString);
+            addressParams.Add("Address.ZipCode", client.Address.ZipCode, DbType.AnsiString);
+
+            var queryClient = @"UPDATE Client SET Name = @Name, Email = @Email) VALUES (@Name, @Email) WHERE ClientId = @ClientId";
+            var queryClientAddress = @"UPDATE Address SET Street = @Street, Number = @Number, Neighborhood = @Neighborhood, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE ClientId = @ClientId";
+
+            using (var trans = new TransactionScope())
+            {
+                if (_dbConnection.Execute(queryClient, clientParams) > 0)
+                    if (_dbConnection.Execute(queryClientAddress, addressParams) > 0)
+                        trans.Complete();
+            }
         }
     }
 }
