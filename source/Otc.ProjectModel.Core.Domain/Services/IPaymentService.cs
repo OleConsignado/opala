@@ -1,4 +1,5 @@
 ﻿using Otc.ProjectModel.Core.Domain.Models;
+using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Domain.Services
 {
@@ -12,6 +13,7 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// <param name="payment">Pagamento (PayPalPayment ou CreditCardPayment)</param>
         /// <exception cref="Exceptions.ClientCoreException">Quando o cliente não for encontrado.</exception>
         /// <exception cref="Exceptions.SubscriptionCoreException">Quando a assinatura não for encontrada.</exception>
-        void AddPayment(Client client, Subscription subscription, Payment payment);
+        /// <exception cref="System.ArgumentNullException">Excessão lançada pelo Sistema</exception>
+        Task AddPaymentAsync(Client client, Subscription subscription, Payment payment);
     }
 }

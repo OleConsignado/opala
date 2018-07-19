@@ -4,11 +4,12 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace Otc.ProjectModel.Infra.Repository
 {
-    public class ClientRepository : IClientRepository
+    public class ClientRepository : IClientReadOnlyRepository, IClientWriteOnlyRepository
     {
         private readonly IDbConnection _dbConnection;
 
@@ -17,7 +18,7 @@ namespace Otc.ProjectModel.Infra.Repository
             this._dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public void AddClient(Client client)
+        public async Task AddClientAsync(Client client)
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", client.Id, DbType.Guid);
@@ -39,25 +40,25 @@ namespace Otc.ProjectModel.Infra.Repository
 
             using (var trans = new TransactionScope())
             {
-                if (_dbConnection.Execute(queryClient, clientParams) > 0)
-                    if (_dbConnection.Execute(queryClientAddress, addressParams) > 0)
+                if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
+                    if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
                         trans.Complete();
             }
         }
 
-        public Client GetClient(Guid clientId)
+        public async Task<Client> GetClientAsync(Guid clientId)
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId, DbType.Guid);
 
-            var query = @"SELECT ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode FROM Clients Where ClientId = @ClientId";
+            var query = @"SELECT Id, Name, Email FROM Client Where Id = @Id";
 
-            var client = _dbConnection.Query<Client>(query, clientParams).SingleOrDefault();
+            var client = await _dbConnection.QueryAsync<Client>(query, clientParams);
 
-            return client;
+            return client.SingleOrDefault();
         }
 
-        public void RemoveClient(Guid clientId)
+        public async Task RemoveClientAsync(Guid clientId)
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId, DbType.Guid);
@@ -72,20 +73,20 @@ namespace Otc.ProjectModel.Infra.Repository
             using (var trans = _dbConnection.BeginTransaction())
             {
 
-                var subscritionsId = _dbConnection.Query<Guid>(selectSubscritionsId).ToList();
+                var subscritionsId = await _dbConnection.QueryAsync<Guid>(selectSubscritionsId);
 
-                foreach (var subId in subscritionsId)
-                    _dbConnection.Execute(deletePayments, new { Number = subId });
+                foreach (var subId in subscritionsId.ToList())
+                    await _dbConnection.ExecuteAsync(deletePayments, new { Number = subId });
 
-                _dbConnection.Execute(deleteSubscriptions, clientParams);
-                _dbConnection.Execute(deleteAddress, clientParams);
-                _dbConnection.Execute(deleteClient, clientParams);
+                await _dbConnection.ExecuteAsync(deleteSubscriptions, clientParams);
+                await _dbConnection.ExecuteAsync(deleteAddress, clientParams);
+                await _dbConnection.ExecuteAsync(deleteClient, clientParams);
 
                 trans.Commit();
             }
         }
 
-        public void UpdateClient(Client client)
+        public async Task UpdateClientAsync(Client client)
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", client.Id, DbType.Guid);
@@ -107,8 +108,8 @@ namespace Otc.ProjectModel.Infra.Repository
 
             using (var trans = new TransactionScope())
             {
-                if (_dbConnection.Execute(queryClient, clientParams) > 0)
-                    if (_dbConnection.Execute(queryClientAddress, addressParams) > 0)
+                if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
+                    if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
                         trans.Complete();
             }
         }

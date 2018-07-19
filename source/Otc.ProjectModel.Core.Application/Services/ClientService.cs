@@ -5,51 +5,62 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.Validations.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Application.Services
 {
     public class ClientService : IClientService
     {
         private readonly IEmailAdapter emailAdapter;
-        private readonly IClientRepository clientRepository;
+        private readonly IClientReadOnlyRepository clientReadOnlyRepository;
+        private readonly IClientWriteOnlyRepository clientWriteOnlyRepository;
+        private readonly ApplicationConfiguration applicationConfiguration;
 
-        public ClientService(IEmailAdapter emailAdapter, IClientRepository clientRepository)
+        public ClientService(IEmailAdapter emailAdapter, IClientReadOnlyRepository clientReadOnlyRepository, IClientWriteOnlyRepository clientWriteOnlyRepository, ApplicationConfiguration applicationConfiguration)
         {
-            this.emailAdapter = emailAdapter;
-            this.clientRepository = clientRepository;
+            this.emailAdapter = emailAdapter ?? throw new ArgumentNullException(nameof(emailAdapter));
+            this.clientReadOnlyRepository = clientReadOnlyRepository ?? throw new ArgumentNullException(nameof(clientReadOnlyRepository));
+            this.clientWriteOnlyRepository = clientWriteOnlyRepository ?? throw new ArgumentNullException(nameof(clientWriteOnlyRepository));
+            this.applicationConfiguration = applicationConfiguration ?? throw new ArgumentNullException(nameof(applicationConfiguration));
         }
 
-        public void AddClient(Client client)
+        public async Task AddClientAsync(Client client)
         {
+            if (client == null)
+                throw new ArgumentNullException(nameof(client));
+
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
-            clientRepository.AddClient(client);
+            await clientWriteOnlyRepository.AddClientAsync(client);
 
-            emailAdapter.Send(client.Email, "origem@teste.com", "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
+            await emailAdapter.SendAsync(client.Email, applicationConfiguration.EmailFrom, "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
         }
 
-        public Client GetClient(Guid clientId)
+        public async Task<Client> GetClientAsync(Guid clientId)
         {
-            var client = clientRepository.GetClient(clientId);
+            var client = await clientReadOnlyRepository.GetClientAsync(clientId);
 
             return client;
         }
 
-        public void RemoveClient(Guid clientId)
+        public async Task RemoveClientAsync(Guid clientId)
         {
-            var client = clientRepository.GetClient(clientId);
+            var client = await clientReadOnlyRepository.GetClientAsync(clientId);
 
             if (client == null)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
-            clientRepository.RemoveClient(clientId);
+            await clientWriteOnlyRepository.RemoveClientAsync(clientId);
         }
 
-        public void UpdateClient(Client client)
+        public async Task UpdateClientAsync(Client client)
         {
+            if (client == null)
+                throw new ArgumentNullException(nameof(client));
+
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
-            clientRepository.UpdateClient(client);
+            await clientWriteOnlyRepository.UpdateClientAsync(client);
         }
     }
 }

@@ -20,7 +20,12 @@ namespace Otc.ProjectModel.Infra.Repository
                 throw new ArgumentNullException(nameof(configurationLambda));
             }
 
-            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IClientReadOnlyRepository, ClientRepository>();
+            services.AddScoped<IClientWriteOnlyRepository, ClientRepository>();
+
+            var dbConfigurationLambda = new ProjectModelRepositorConfigurationLambda(services);
+
+            configurationLambda.Invoke(dbConfigurationLambda);
 
             return services;
         }

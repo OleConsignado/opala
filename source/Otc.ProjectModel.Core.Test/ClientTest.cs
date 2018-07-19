@@ -7,6 +7,7 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.Core.Test.Mock;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Otc.ProjectModel.Core.Test
@@ -48,12 +49,13 @@ namespace Otc.ProjectModel.Core.Test
 
             services.AddLogging();
 
-            services.AddScoped<IClientRepository, FakeClientRepository>();
+            services.AddScoped<IClientReadOnlyRepository, FakeClientRepository>();
+            services.AddScoped<IClientWriteOnlyRepository, FakeClientRepository>();
             services.AddScoped<IEmailAdapter, FakeEmailAdapter>();
 
             services.AddScoped(c => emailAdapter.Object);
 
-            services.AddProjectModelCoreApplication();
+            services.AddProjectModelCoreApplication(c => c.Configure(new ApplicationConfiguration { EmailFrom = "meu.teste@teste.com" }));
 
             serviceProvider = services.BuildServiceProvider();
 
@@ -67,13 +69,13 @@ namespace Otc.ProjectModel.Core.Test
         [Fact]
         public void Add_Client_Success()
         {
-            clientService.AddClient(client);
+            clientService.AddClientAsync(client);
 
             Assert.IsType<Client>(client);
         }
 
         [Fact]
-        public void Add_Client_With_Invalid_Name()
+        public async Task Add_Client_With_Invalid_Name()
         {
             client = new Client
             {
@@ -82,7 +84,7 @@ namespace Otc.ProjectModel.Core.Test
                 Address = address
             };
 
-            Assert.Throws<Validations.Helpers.ValidationException>(() => clientService.AddClient(client));
+            await Assert.ThrowsAsync<Validations.Helpers.ValidationException>(() => clientService.AddClientAsync(client));
         }
 
         [Fact]
@@ -98,7 +100,6 @@ namespace Otc.ProjectModel.Core.Test
 
             var payment = new PayPalPayment
             {
-                Number = "654897",
                 TransactionCode = "12345678",
                 PaidDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(5),
@@ -110,7 +111,7 @@ namespace Otc.ProjectModel.Core.Test
 
             subscription.Payments.Add(payment);
 
-            subscriptionService.AddSubscription(client, subscription);
+            subscriptionService.AddSubscriptionAsync(client, subscription);
 
             Assert.True(client.HasSubscription());
         }
@@ -139,9 +140,9 @@ namespace Otc.ProjectModel.Core.Test
         //}
 
         [Fact]
-        public void Get_Client_By_ClientId()
+        public async Task Get_Client_By_ClientId()
         {
-            var client = clientService.GetClient(clientId);
+            var client = await clientService.GetClientAsync(clientId);
 
             Assert.NotNull(client);
             Assert.IsType<Client>(client);
@@ -149,11 +150,11 @@ namespace Otc.ProjectModel.Core.Test
         }
 
         [Fact]
-        public void Get_Client_By_Id_Not_Found()
+        public async Task Get_Client_By_Id_Not_Found()
         {
             clientId = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21189");
 
-            var client = clientService.GetClient(clientId);
+            var client = await clientService.GetClientAsync(clientId);
 
             Assert.Null(client);
         }

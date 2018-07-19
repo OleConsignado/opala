@@ -4,7 +4,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 {
     public abstract class Payment
     {
-        public string Number { get; set; }
+        public Guid Id { get; set; }
         public DateTime PaidDate { get; set; }
         public DateTime ExpireDate { get; set; }
         public decimal Total { get; set; }
@@ -14,7 +14,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 
         public Payment()
         {
-            Number = Guid.NewGuid().ToString().Replace("-", "");
+            Id = Guid.NewGuid();
         }
     }
 }

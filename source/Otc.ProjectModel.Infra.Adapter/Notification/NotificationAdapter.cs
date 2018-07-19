@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Infra.Adapter.Notification
 {
@@ -14,11 +15,17 @@ namespace Otc.ProjectModel.Infra.Adapter.Notification
 
         public NotificationAdapter(NotificationAdapterConfiguration notificationAdapterConfiguration)
         {
-            this.notificationAdapterConfiguration = notificationAdapterConfiguration;
+            this.notificationAdapterConfiguration = notificationAdapterConfiguration ?? throw new ArgumentNullException(nameof(notificationAdapterConfiguration));
         }
 
-        public void Send(string number, string message)
+        public async Task SendAsync(string number, string message)
         {
+            if (number == null)
+                throw new ArgumentNullException(nameof(number));
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(notificationAdapterConfiguration.NotificationUrl);
@@ -32,7 +39,7 @@ namespace Otc.ProjectModel.Infra.Adapter.Notification
 
                 var postedData = JsonConvert.SerializeObject(notificationRequest);
                 var content = new StringContent(postedData, Encoding.UTF8, "application/json");
-                var response = client.PostAsync(@"api/Sms/EnviarSms", content).Result;
+                var response = await client.PostAsync(@"api/Sms/EnviarSms", content);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -44,7 +51,7 @@ namespace Otc.ProjectModel.Infra.Adapter.Notification
                 }
                 else
                 {
-                    string data = response.Content.ReadAsStringAsync().Result;
+                    string data = await response.Content.ReadAsStringAsync();
 
                     throw new Exception(data);
                 }

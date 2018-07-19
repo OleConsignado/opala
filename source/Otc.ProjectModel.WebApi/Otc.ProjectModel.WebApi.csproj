@@ -4,12 +4,46 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.1\Otc.ProjectModel.WebApi.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp2.1\Otc.ProjectModel.WebApi.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Graceterm" Version="1.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Otc.ExceptionHandling" Version="1.1.1" />
+    <PackageReference Include="Otc.ExceptionHandling.Abstractions" Version="1.0.1" />
+    <PackageReference Include="Otc.Extensions.Configuration" Version="1.0.2" />
+    <PackageReference Include="Otc.Mvc.Filters" Version="1.0.2" />
+    <PackageReference Include="Otc.SwaggerSchemaFiltering" Version="1.0.1" />
+    <PackageReference Include="Otc.Validations.Helpers" Version="1.0.1" />
+    <PackageReference Include="Serilog" Version="2.7.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Otc.ProjectModel.Core.Application\Otc.ProjectModel.Core.Application.csproj" />
+    <ProjectReference Include="..\Otc.ProjectModel.Core.Domain\Otc.ProjectModel.Core.Domain.csproj" />
+    <ProjectReference Include="..\Otc.ProjectModel.Infra.Adapter\Otc.ProjectModel.Infra.Adapter.csproj" />
+    <ProjectReference Include="..\Otc.ProjectModel.Infra.Repository\Otc.ProjectModel.Infra.Repository.csproj" />
   </ItemGroup>
 
 </Project>

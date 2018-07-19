@@ -1,12 +1,13 @@
 ﻿using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
+using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Test.Mock
 {
-    public class FakeClientRepository : IClientRepository
+    public class FakeClientRepository : IClientReadOnlyRepository, IClientWriteOnlyRepository
     {
-        public void AddClient(Client client)
+        public async Task AddClientAsync(Client client)
         {
             if (client == null)
                 throw new NullReferenceException();
@@ -37,12 +38,17 @@ namespace Otc.ProjectModel.Core.Test.Mock
             return null;
         }
 
-        public void RemoveClient(Guid clientId)
+        public Task<Client> GetClientAsync(Guid clientId)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateClient(Client client)
+        public Task RemoveClientAsync(Guid clientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateClientAsync(Client client)
         {
             throw new NotImplementedException();
         }

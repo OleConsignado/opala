@@ -7,7 +7,7 @@ namespace Otc.ProjectModel.Core.Application
 {
     public static class OtcProjectModelCoreApplicationServiceCollectionExtensions
     {
-        public static IServiceCollection AddProjectModelCoreApplication(this IServiceCollection services)
+        public static IServiceCollection AddProjectModelCoreApplication(this IServiceCollection services, Action<ApplicationConfigurationLambda> configurationLambda)
         {
             if (services == null)
             {
@@ -15,6 +15,9 @@ namespace Otc.ProjectModel.Core.Application
             }
 
             services.AddScoped<IClientService, ClientService>();
+
+            var applicationConfigurationLambda = new ApplicationConfigurationLambda(services);
+            configurationLambda.Invoke(applicationConfigurationLambda);
 
             return services;
         }

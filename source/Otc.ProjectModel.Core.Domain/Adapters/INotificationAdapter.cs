@@ -1,7 +1,17 @@
-﻿namespace Otc.ProjectModel.Core.Domain.Adapters
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Otc.ProjectModel.Core.Domain.Adapters
 {
     public interface INotificationAdapter
     {
-        void Send(string number, string message);
+        /// <summary>
+        /// Enviar SMS
+        /// </summary>
+        /// <param name="number">Número do telefone</param>
+        /// <param name="message">Mensagem</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Excessão de sistema</exception>
+        Task SendAsync(string number, string message);
     }
 }

@@ -1,17 +1,18 @@
 ﻿using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
+using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Test.Mock
 {
-    public class FakeSubscriptionRepository : ISubscriptionRepository
+    public class FakeSubscriptionRepository : ISubscriptionReadOnlyRepository
     {
-        public void AddSubscription(Guid clientId, Subscription subscription)
+        public async Task AddSubscriptionAsync(Guid clientId, Subscription subscription)
         {
             throw new NotImplementedException();
         }
 
-        public Subscription GetSubscription(Guid id)
+        public async Task<Subscription> GetSubscriptionAsync(Guid id)
         {
             throw new NotImplementedException();
         }
