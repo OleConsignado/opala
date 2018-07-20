@@ -7,6 +7,11 @@ namespace Otc.ProjectModel.Core.Domain.Models
 {
     public class Client
     {
+        public Client()
+        {
+
+        }
+
         public virtual IList<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 
         public Guid Id { get; set; } = Guid.NewGuid();

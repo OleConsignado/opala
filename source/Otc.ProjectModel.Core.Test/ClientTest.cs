@@ -93,9 +93,9 @@ namespace Otc.ProjectModel.Core.Test
             var subscription = new Subscription
             {
                 Active = true,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(10),
-                LastUpdateDate = null
+                LastUpdatedDate = null
             };
 
             var payment = new PayPalPayment
@@ -111,7 +111,7 @@ namespace Otc.ProjectModel.Core.Test
 
             subscription.Payments.Add(payment);
 
-            subscriptionService.AddSubscriptionAsync(client, subscription);
+            subscriptionService.AddSubscriptionAsync(subscription);
 
             Assert.True(client.HasSubscription());
         }

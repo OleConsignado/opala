@@ -22,23 +22,23 @@ namespace Otc.ProjectModel.Infra.Repository
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", client.Id, DbType.Guid);
-            clientParams.Add("Nome", client.Name, DbType.AnsiString);
+            clientParams.Add("Name", client.Name, DbType.AnsiString);
             clientParams.Add("Email", client.Email, DbType.AnsiString);
 
             var addressParams = new DynamicParameters();
-            addressParams.Add("Address.ClientId", client.Id, DbType.Guid);
-            addressParams.Add("Address.Street", client.Address.Street, DbType.AnsiString);
-            addressParams.Add("Address.Number", client.Address.Number, DbType.AnsiString);
-            addressParams.Add("Address.Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
-            addressParams.Add("Address.City", client.Address.City, DbType.AnsiString);
-            addressParams.Add("Address.State", client.Address.State, DbType.AnsiString);
-            addressParams.Add("Address.Country", client.Address.Country, DbType.AnsiString);
-            addressParams.Add("Address.ZipCode", client.Address.ZipCode, DbType.AnsiString);
+            addressParams.Add("ClientId", client.Id, DbType.Guid);
+            addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
+            addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
+            addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
+            addressParams.Add("City", client.Address.City, DbType.AnsiString);
+            addressParams.Add("State", client.Address.State, DbType.AnsiString);
+            addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
+            addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
 
             var queryClient = @"INSERT INTO Client (Id, Name, Email) VALUES (@Id, @Name, @Email)";
             var queryClientAddress = @"INSERT INTO Address (ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode) VALUES (@ClientId, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode)";
 
-            using (var trans = new TransactionScope())
+            using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
                     if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
@@ -51,9 +51,13 @@ namespace Otc.ProjectModel.Infra.Repository
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId, DbType.Guid);
 
-            var query = @"SELECT Id, Name, Email FROM Client Where Id = @Id";
+            var query = @"select Id, Name, Email, ClientId, Street, Number, Neighborhood, City, State, Country, 
+                        ZipCode from Client c inner join Address a on c.Id = a.ClientId Where c.Id = @Id";
 
-            var client = await _dbConnection.QueryAsync<Client>(query, clientParams);
+            var client = await _dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
+                cli.Address = add;
+                return cli;
+            }, clientParams, splitOn: "Id,ClientId");
 
             return client.SingleOrDefault();
         }
@@ -70,9 +74,8 @@ namespace Otc.ProjectModel.Infra.Repository
 
             var selectSubscritionsId = @"SELECT SubscritionId WHERE ClientId = @ClientID";
 
-            using (var trans = _dbConnection.BeginTransaction())
+            using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-
                 var subscritionsId = await _dbConnection.QueryAsync<Guid>(selectSubscritionsId);
 
                 foreach (var subId in subscritionsId.ToList())
@@ -82,7 +85,7 @@ namespace Otc.ProjectModel.Infra.Repository
                 await _dbConnection.ExecuteAsync(deleteAddress, clientParams);
                 await _dbConnection.ExecuteAsync(deleteClient, clientParams);
 
-                trans.Commit();
+                trans.Complete();
             }
         }
 
@@ -90,23 +93,23 @@ namespace Otc.ProjectModel.Infra.Repository
         {
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", client.Id, DbType.Guid);
-            clientParams.Add("Nome", client.Name, DbType.AnsiString);
+            clientParams.Add("Name", client.Name, DbType.AnsiString);
             clientParams.Add("Email", client.Email, DbType.AnsiString);
 
             var addressParams = new DynamicParameters();
-            addressParams.Add("Address.ClientId", client.Id, DbType.Guid);
-            addressParams.Add("Address.Street", client.Address.Street, DbType.AnsiString);
-            addressParams.Add("Address.Number", client.Address.Number, DbType.AnsiString);
-            addressParams.Add("Address.Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
-            addressParams.Add("Address.City", client.Address.City, DbType.AnsiString);
-            addressParams.Add("Address.State", client.Address.State, DbType.AnsiString);
-            addressParams.Add("Address.Country", client.Address.Country, DbType.AnsiString);
-            addressParams.Add("Address.ZipCode", client.Address.ZipCode, DbType.AnsiString);
+            addressParams.Add("ClientId", client.Id, DbType.Guid);
+            addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
+            addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
+            addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
+            addressParams.Add("City", client.Address.City, DbType.AnsiString);
+            addressParams.Add("State", client.Address.State, DbType.AnsiString);
+            addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
+            addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
 
-            var queryClient = @"UPDATE Client SET Name = @Name, Email = @Email) VALUES (@Name, @Email) WHERE ClientId = @ClientId";
+            var queryClient = @"UPDATE Client SET Name = @Name, Email = @Email WHERE Id = @Id";
             var queryClientAddress = @"UPDATE Address SET Street = @Street, Number = @Number, Neighborhood = @Neighborhood, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE ClientId = @ClientId";
 
-            using (var trans = new TransactionScope())
+            using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
                     if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)

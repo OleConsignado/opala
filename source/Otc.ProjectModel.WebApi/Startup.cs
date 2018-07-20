@@ -67,7 +67,6 @@ namespace Otc.ProjectModel.WebApi
                         Description = ApplicationProperties.Description
                     });
                 c.IncludeXmlComments(GetXmlCommentsPath());
-
             });
 
             services.AddProjectModelCoreApplication(c => c.Configure(Configuration.SafeGet<ApplicationConfiguration>()));

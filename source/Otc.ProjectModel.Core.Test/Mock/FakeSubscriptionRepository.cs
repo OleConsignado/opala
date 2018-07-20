@@ -7,7 +7,7 @@ namespace Otc.ProjectModel.Core.Test.Mock
 {
     public class FakeSubscriptionRepository : ISubscriptionReadOnlyRepository
     {
-        public async Task AddSubscriptionAsync(Guid clientId, Subscription subscription)
+        public async Task AddSubscriptionAsync(Subscription subscription)
         {
             throw new NotImplementedException();
         }

@@ -7,6 +7,6 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
     public interface ISubscriptionReadOnlyRepository
     {
         Task<Subscription> GetSubscriptionAsync(Guid id);
-        Task AddSubscriptionAsync(Guid id, Subscription subscription);
+        Task AddSubscriptionAsync(Subscription subscription);
     }
 }
