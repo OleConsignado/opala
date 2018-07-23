@@ -3,20 +3,23 @@ using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Application.Services
 {
-    public class SubscriptionService : ISubscriptionService
+    public class SubscriptionService :ISubscriptionService
     {
-        private readonly ISubscriptionReadOnlyRepository subscriptionRepository;
-        private readonly IClientService clientService;
+        private readonly ISubscriptionReadOnlyRepository subscriptionReadOnlyRepository;
+        private readonly ISubscriptionWriteOnlyRepository subscriptionWriteOnlyRepository;
+        private readonly IClientReadOnlyRepository clientReadOnlyRepository;
 
-        public SubscriptionService(ISubscriptionReadOnlyRepository subscriptionRepository, IClientService clientService)
+        public SubscriptionService(ISubscriptionReadOnlyRepository subscriptionReadOnlyRepository, ISubscriptionWriteOnlyRepository subscriptionWriteOnlyRepository, IClientReadOnlyRepository clientReadOnlyRepository)
         {
-            this.subscriptionRepository = subscriptionRepository ?? throw new ArgumentNullException(nameof(subscriptionRepository));
-            this.clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
+            this.subscriptionReadOnlyRepository = subscriptionReadOnlyRepository ?? throw new ArgumentNullException(nameof(subscriptionReadOnlyRepository));
+            this.subscriptionWriteOnlyRepository = subscriptionWriteOnlyRepository ?? throw new ArgumentNullException(nameof(subscriptionWriteOnlyRepository));
+            this.clientReadOnlyRepository = clientReadOnlyRepository ?? throw new ArgumentNullException(nameof(clientReadOnlyRepository));
         }
 
         public async Task AddSubscriptionAsync(Subscription subscription)
@@ -24,7 +27,7 @@ namespace Otc.ProjectModel.Core.Application.Services
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            var client = await clientService.GetClientAsync(subscription.ClientId);
+            var client = await clientReadOnlyRepository.GetClientAsync(subscription.ClientId);
 
             if (client == null)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
@@ -34,12 +37,19 @@ namespace Otc.ProjectModel.Core.Application.Services
             if (hasSubscriptionActive)
                 throw new SubscriptionCoreException().AddError(SubscriptionCoreError.SubscriptionIsActive);
 
-            await subscriptionRepository.AddSubscriptionAsync(subscription);
+            await subscriptionWriteOnlyRepository.AddSubscriptionAsync(subscription);
+        }
+
+        public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)
+        {
+            var subscriptions = await subscriptionReadOnlyRepository.GetClientSubscriptionsAsync(clientId);
+
+            return subscriptions;
         }
 
         public async Task<Subscription> GetSubcriptionAsync(Guid id)
         {
-            return await subscriptionRepository.GetSubscriptionAsync(id);
+            return await subscriptionReadOnlyRepository.GetSubscriptionAsync(id);
         }
     }
 }

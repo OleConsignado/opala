@@ -8,6 +8,6 @@ namespace Otc.ProjectModel.Infra.Adapter.Email
         public string Smtp { get; set; }
 
         [Required]
-        public int Port { get; set; }
+        public int? Port { get; set; }
     }
 }

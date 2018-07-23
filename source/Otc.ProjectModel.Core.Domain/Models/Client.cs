@@ -1,7 +1,6 @@
 ﻿using Otc.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Otc.ProjectModel.Core.Domain.Models
 {
@@ -12,7 +11,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 
         }
 
-        public virtual IList<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+        public virtual IEnumerable<Subscription> Subscriptions { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -24,10 +23,5 @@ namespace Otc.ProjectModel.Core.Domain.Models
         public string Email { get; set; }
 
         public Address Address { get; set; }
-
-        public bool HasSubscription()
-        {
-            return Subscriptions.Any();
-        }
     }
 }

@@ -2,6 +2,7 @@
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,37 +12,40 @@ namespace Otc.ProjectModel.Infra.Repository
 {
     public class ClientRepository : IClientReadOnlyRepository, IClientWriteOnlyRepository
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly IDbConnection dbConnection;
 
         public ClientRepository(IDbConnection dbConnection)
         {
-            this._dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
+            this.dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
         public async Task AddClientAsync(Client client)
         {
-            var clientParams = new DynamicParameters();
-            clientParams.Add("Id", client.Id, DbType.Guid);
-            clientParams.Add("Name", client.Name, DbType.AnsiString);
-            clientParams.Add("Email", client.Email, DbType.AnsiString);
+            if (client == null)
+                throw new ArgumentNullException(nameof(client));
 
-            var addressParams = new DynamicParameters();
-            addressParams.Add("ClientId", client.Id, DbType.Guid);
-            addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
-            addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
-            addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
-            addressParams.Add("City", client.Address.City, DbType.AnsiString);
-            addressParams.Add("State", client.Address.State, DbType.AnsiString);
-            addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
-            addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
+            //var clientParams = new DynamicParameters();
+            //clientParams.Add("Id", client.Id, DbType.Guid);
+            //clientParams.Add("Name", client.Name, DbType.AnsiString);
+            //clientParams.Add("Email", client.Email, DbType.AnsiString);
+
+            //var addressParams = new DynamicParameters();
+            //addressParams.Add("ClientId", client.Id, DbType.Guid);
+            //addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
+            //addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
+            //addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
+            //addressParams.Add("City", client.Address.City, DbType.AnsiString);
+            //addressParams.Add("State", client.Address.State, DbType.AnsiString);
+            //addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
+            //addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
 
             var queryClient = @"INSERT INTO Client (Id, Name, Email) VALUES (@Id, @Name, @Email)";
             var queryClientAddress = @"INSERT INTO Address (ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode) VALUES (@ClientId, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode)";
 
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
-                    if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
+                if (await dbConnection.ExecuteAsync(queryClient, client /*clientParams*/) > 0)
+                    if (await dbConnection.ExecuteAsync(queryClientAddress, client.Address /*addressParams*/) > 0)
                         trans.Complete();
             }
         }
@@ -54,7 +58,7 @@ namespace Otc.ProjectModel.Infra.Repository
             var query = @"select Id, Name, Email, ClientId, Street, Number, Neighborhood, City, State, Country, 
                         ZipCode from Client c inner join Address a on c.Id = a.ClientId Where c.Id = @Id";
 
-            var client = await _dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
+            var client = await dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
                 cli.Address = add;
                 return cli;
             }, clientParams, splitOn: "Id,ClientId");
@@ -76,14 +80,14 @@ namespace Otc.ProjectModel.Infra.Repository
 
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var subscritionsId = await _dbConnection.QueryAsync<Guid>(selectSubscritionsId);
+                var subscritionsId = await dbConnection.QueryAsync<Guid>(selectSubscritionsId);
 
                 foreach (var subId in subscritionsId.ToList())
-                    await _dbConnection.ExecuteAsync(deletePayments, new { Number = subId });
+                    await dbConnection.ExecuteAsync(deletePayments, new { Number = subId });
 
-                await _dbConnection.ExecuteAsync(deleteSubscriptions, clientParams);
-                await _dbConnection.ExecuteAsync(deleteAddress, clientParams);
-                await _dbConnection.ExecuteAsync(deleteClient, clientParams);
+                await dbConnection.ExecuteAsync(deleteSubscriptions, clientParams);
+                await dbConnection.ExecuteAsync(deleteAddress, clientParams);
+                await dbConnection.ExecuteAsync(deleteClient, clientParams);
 
                 trans.Complete();
             }
@@ -111,8 +115,8 @@ namespace Otc.ProjectModel.Infra.Repository
 
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                if (await _dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
-                    if (await _dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
+                if (await dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
+                    if (await dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
                         trans.Complete();
             }
         }

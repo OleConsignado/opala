@@ -10,7 +10,7 @@ namespace Otc.ProjectModel.WebApi.Dtos
 
         public string Email { get; set; }
 
-       public Address Address { get; set; }
+       public AddressDto Address { get; set; }
 
     }
 }

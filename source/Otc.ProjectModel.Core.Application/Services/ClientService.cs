@@ -5,7 +5,9 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.Validations.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Otc.ProjectModel.Core.Application.Services
 {
@@ -14,14 +16,17 @@ namespace Otc.ProjectModel.Core.Application.Services
         private readonly IEmailAdapter emailAdapter;
         private readonly IClientReadOnlyRepository clientReadOnlyRepository;
         private readonly IClientWriteOnlyRepository clientWriteOnlyRepository;
+        private readonly ISubscriptionService subscriptionService;
+
         private readonly ApplicationConfiguration applicationConfiguration;
 
-        public ClientService(IEmailAdapter emailAdapter, IClientReadOnlyRepository clientReadOnlyRepository, IClientWriteOnlyRepository clientWriteOnlyRepository, ApplicationConfiguration applicationConfiguration)
+        public ClientService(IEmailAdapter emailAdapter, IClientReadOnlyRepository clientReadOnlyRepository, IClientWriteOnlyRepository clientWriteOnlyRepository, ApplicationConfiguration applicationConfiguration, ISubscriptionService subscriptionService)
         {
             this.emailAdapter = emailAdapter ?? throw new ArgumentNullException(nameof(emailAdapter));
             this.clientReadOnlyRepository = clientReadOnlyRepository ?? throw new ArgumentNullException(nameof(clientReadOnlyRepository));
             this.clientWriteOnlyRepository = clientWriteOnlyRepository ?? throw new ArgumentNullException(nameof(clientWriteOnlyRepository));
             this.applicationConfiguration = applicationConfiguration ?? throw new ArgumentNullException(nameof(applicationConfiguration));
+            this.subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
         }
 
         public async Task AddClientAsync(Client client)
@@ -41,6 +46,13 @@ namespace Otc.ProjectModel.Core.Application.Services
             var client = await clientReadOnlyRepository.GetClientAsync(clientId);
 
             return client;
+        }
+
+        public async Task<IEnumerable<Subscription>> GetSubscriptionsAsync(Guid clientId)
+        {
+            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+
+            return subscriptions;
         }
 
         public async Task RemoveClientAsync(Guid clientId)

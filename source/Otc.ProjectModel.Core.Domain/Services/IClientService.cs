@@ -1,5 +1,7 @@
-﻿using Otc.ProjectModel.Core.Domain.Models;
+﻿using Otc.ProjectModel.Core.Domain.Exceptions;
+using Otc.ProjectModel.Core.Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Domain.Services
@@ -19,7 +21,7 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// Inclui um novo Cliente
         /// </summary>
         /// <param name="client">Objeto Cliente</param>
-        ///// <exception cref="Otc.DomainBase.Exceptions.ValidationCoreException"></exception>
+        //// <exception cref="ValidationCoreException"></exception>
         Task AddClientAsync(Client client);
 
         /// <summary>
@@ -33,7 +35,17 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// Atualiza um Cliente
         /// </summary>
         /// <param name="client">Objeto Cliente</param>
-        ///// <exception cref="Otc.DomainBase.Exceptions.ValidationCoreException"></exception>
+        //// <exception cref="DomainBase.Exceptions.ValidationCoreException"></exception>
         Task UpdateClientAsync(Client client);
+
+        /// <summary>
+        /// Lista as Assinaturas do Cliente
+        /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <returns></returns>
+        /// <exception cref="SubscriptionCoreException"></exception>
+        Task<IEnumerable<Subscription>> GetSubscriptionsAsync(Guid clientId);
+
+        //Todo Add HasSubscription
     }
 }

@@ -12,12 +12,12 @@ namespace Otc.ProjectModel.WebApi
             {
                 //Get
                 c.CreateMap<Client, ClientResponse>();
-                c.CreateMap<Core.Domain.Models.Address, Dtos.Address>();
+                c.CreateMap<Address, AddressDto>();
 
                 //Post
-                c.CreateMap<ClientRequest,Client>();
-                c.CreateMap<Dtos.Address, Core.Domain.Models.Address>();
-                c.CreateMap<Dtos.SubscriptionRequest, Core.Domain.Models.Subscription>();
+                c.CreateMap<ClientRequest, Client>();//.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ClientId));
+                c.CreateMap<AddressDto, Address>();
+                c.CreateMap<SubscriptionRequest, Subscription>();
             });
         }
     }

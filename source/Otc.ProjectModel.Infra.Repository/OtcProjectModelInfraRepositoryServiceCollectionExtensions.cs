@@ -22,6 +22,8 @@ namespace Otc.ProjectModel.Infra.Repository
 
             services.AddScoped<IClientReadOnlyRepository, ClientRepository>();
             services.AddScoped<IClientWriteOnlyRepository, ClientRepository>();
+            services.AddScoped<ISubscriptionReadOnlyRepository, SubscriptionRepository>();
+            services.AddScoped<ISubscriptionWriteOnlyRepository, SubscriptionRepository>();
 
             var dbConfigurationLambda = new ProjectModelRepositorConfigurationLambda(services);
 

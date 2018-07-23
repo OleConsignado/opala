@@ -2,7 +2,7 @@
 
 namespace Otc.ProjectModel.WebApi.Dtos
 {
-    public class Address
+    public class AddressDto
     {
         [Required(ErrorKey = "400.001")]
         public string Street { get; set; }

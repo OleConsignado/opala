@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <summary>
         /// Inclui um novo Cliente
         /// </summary>
-        /// <param name="addClientRequest">Client</param>
+        /// <param name="addClientRequest">Cliente</param>
         /// <returns>Client</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
@@ -60,16 +61,18 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <summary>
         /// Atualiza um Cliente
         /// </summary>
-        /// <param name="updateClientRequest">Client</param>
+        /// <param name="clientId"></param>
+        /// <param name="updateClientRequest">Cliente</param>
         /// <returns>Client</returns>
-        [HttpPut]
+        [HttpPut("{clientId}")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
         [ProducesResponseType(typeof(ClientRequest), 200)]
-        public async Task<IActionResult> UpdateClientAsync([FromBody] ClientRequest updateClientRequest)
+        public async Task<IActionResult> UpdateClientAsync(Guid clientId, [FromBody] ClientRequest updateClientRequest)
         {
             ValidationHelper.ThrowValidationExceptionIfNotValid(updateClientRequest);
 
             var client = Mapper.Map<Client>(updateClientRequest);
+            client.Id = clientId;
 
             await clientService.UpdateClientAsync(client);
 
@@ -81,7 +84,7 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// </summary>
         /// <param name="addSubscriptionRequest">Client</param>
         /// <returns>Client</returns>
-        [HttpPost("{id}/subscriptions")]
+        [HttpPost("{clientId}/subscriptions")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(ClientRequest), 200)]
@@ -94,6 +97,22 @@ namespace Otc.ProjectModel.WebApi.Controllers
             await subscriptionService.AddSubscriptionAsync(subscription);
 
             return Ok(subscription);
+        }
+
+        /// <summary>
+        /// Listas as Assinaturas de um Cliente
+        /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <returns>Client</returns>
+        [HttpGet("{clientId}/subscriptions")]
+        [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
+        [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
+        public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId)
+        {
+
+           var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+
+            return Ok(subscriptions);
         }
 
     }

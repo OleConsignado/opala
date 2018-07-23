@@ -5,7 +5,7 @@ namespace Otc.ProjectModel.WebApi.Dtos
 {
     public class ClientRequest
     {
-        public Guid Id { get; set; }
+        //public Guid ClientId { get; set; }
 
         [Required(ErrorKey = "400.001")]
         public string Name { get; set; }
@@ -14,6 +14,6 @@ namespace Otc.ProjectModel.WebApi.Dtos
         [EmailAddress(ErrorKey = "400.003")]
         public string Email { get; set; }
 
-        public Address Address { get; set; }
+        public AddressDto Address { get; set; }
     }
 }
