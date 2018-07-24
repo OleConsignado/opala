@@ -2,7 +2,7 @@
 using Otc.ProjectModel.Core.Domain.Adapters;
 using System;
 
-namespace Otc.ProjectModel.Infra.Adapter.Notification
+namespace Otc.ProjectModel.Infra.NotificationAdapter
 {
     public static class NotificationAdapterServiceCollectionExtensions
     {

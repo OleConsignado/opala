@@ -1,6 +1,6 @@
 ﻿using Otc.ComponentModel.DataAnnotations;
 
-namespace Otc.ProjectModel.Infra.Adapter.Notification
+namespace Otc.ProjectModel.Infra.NotificationAdapter
 {
     public class NotificationAdapterConfiguration
     {

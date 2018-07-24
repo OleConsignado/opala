@@ -42,7 +42,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Otc.ProjectModel.Core.Application\Otc.ProjectModel.Core.Application.csproj" />
     <ProjectReference Include="..\Otc.ProjectModel.Core.Domain\Otc.ProjectModel.Core.Domain.csproj" />
-    <ProjectReference Include="..\Otc.ProjectModel.Infra.Adapter\Otc.ProjectModel.Infra.Adapter.csproj" />
+    <ProjectReference Include="..\Otc.ProjectModel.Infra.EmailAdapter\Otc.ProjectModel.Infra.EmailAdapter.csproj" />
+    <ProjectReference Include="..\Otc.ProjectModel.Infra.NotificationAdapter\Otc.ProjectModel.Infra.NotificationAdapter.csproj" />
     <ProjectReference Include="..\Otc.ProjectModel.Infra.Repository\Otc.ProjectModel.Infra.Repository.csproj" />
   </ItemGroup>
 

@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Otc.ProjectModel.Infra.Adapter.Notification
+namespace Otc.ProjectModel.Infra.NotificationAdapter
 {
     public class NotificationAdapter : INotificationAdapter
     {

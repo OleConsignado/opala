@@ -17,6 +17,7 @@ namespace Otc.ProjectModel.Infra.Repository
         public ClientRepository(IDbConnection dbConnection)
         {
             this.dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
+            SqlMapper.AddTypeMap(typeof(string), DbType.AnsiString);
         }
 
         public async Task AddClientAsync(Client client)
@@ -24,28 +25,28 @@ namespace Otc.ProjectModel.Infra.Repository
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
 
-            //var clientParams = new DynamicParameters();
-            //clientParams.Add("Id", client.Id, DbType.Guid);
-            //clientParams.Add("Name", client.Name, DbType.AnsiString);
-            //clientParams.Add("Email", client.Email, DbType.AnsiString);
+            var clientParams = new DynamicParameters();
+            clientParams.Add("Id", client.Id, DbType.Guid);
+            clientParams.Add("Name", client.Name, DbType.AnsiString);
+            clientParams.Add("Email", client.Email, DbType.AnsiString);
 
-            //var addressParams = new DynamicParameters();
-            //addressParams.Add("ClientId", client.Id, DbType.Guid);
-            //addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
-            //addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
-            //addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
-            //addressParams.Add("City", client.Address.City, DbType.AnsiString);
-            //addressParams.Add("State", client.Address.State, DbType.AnsiString);
-            //addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
-            //addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
+            var addressParams = new DynamicParameters();
+            addressParams.Add("ClientId", client.Id, DbType.Guid);
+            addressParams.Add("Street", client.Address.Street, DbType.AnsiString);
+            addressParams.Add("Number", client.Address.Number, DbType.AnsiString);
+            addressParams.Add("Neighborhood", client.Address.Neighborhood, DbType.AnsiString);
+            addressParams.Add("City", client.Address.City, DbType.AnsiString);
+            addressParams.Add("State", client.Address.State, DbType.AnsiString);
+            addressParams.Add("Country", client.Address.Country, DbType.AnsiString);
+            addressParams.Add("ZipCode", client.Address.ZipCode, DbType.AnsiString);
 
             var queryClient = @"INSERT INTO Client (Id, Name, Email) VALUES (@Id, @Name, @Email)";
             var queryClientAddress = @"INSERT INTO Address (ClientId, Street, Number, Neighborhood, City, State, Country, ZipCode) VALUES (@ClientId, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode)";
 
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                if (await dbConnection.ExecuteAsync(queryClient, client /*clientParams*/) > 0)
-                    if (await dbConnection.ExecuteAsync(queryClientAddress, client.Address /*addressParams*/) > 0)
+                if (await dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
+                    if (await dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
                         trans.Complete();
             }
         }

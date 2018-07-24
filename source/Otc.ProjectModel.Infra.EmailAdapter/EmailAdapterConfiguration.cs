@@ -1,6 +1,6 @@
 ﻿using Otc.ComponentModel.DataAnnotations;
 
-namespace Otc.ProjectModel.Infra.Adapter.Email
+namespace Otc.ProjectModel.Infra.EmailAdapter
 {
     public class EmailAdapterConfiguration
     {
@@ -8,6 +8,7 @@ namespace Otc.ProjectModel.Infra.Adapter.Email
         public string Smtp { get; set; }
 
         [Required]
-        public int? Port { get; set; }
+        [MinLength(1, ErrorKey = "400.001")]
+        public int Port { get; set; }
     }
 }

@@ -6,17 +6,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
-using Otc.ProjectModel.Infra.Adapter.Email;
 using Otc.Mvc.Filters;
 using Otc.SwaggerSchemaFiltering;
 using Serilog;
 using Serilog.Formatting.Json;
 using Swashbuckle.AspNetCore.Swagger;
-using Otc.ProjectModel.Infra.Adapter.Notification;
 using Otc.ProjectModel.Core.Application;
 using Otc.ProjectModel.Infra.Repository;
 using Graceterm;
 using Otc.Extensions.Configuration;
+using Otc.ProjectModel.Infra.EmailAdapter;
+using Otc.ProjectModel.Infra.NotificationAdapter;
 
 namespace Otc.ProjectModel.WebApi
 {
@@ -85,9 +85,7 @@ namespace Otc.ProjectModel.WebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseGraceterm(options =>
             {

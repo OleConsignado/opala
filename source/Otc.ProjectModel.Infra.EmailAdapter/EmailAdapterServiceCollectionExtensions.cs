@@ -2,7 +2,7 @@
 using Otc.ProjectModel.Core.Domain.Adapters;
 using System;
 
-namespace Otc.ProjectModel.Infra.Adapter.Email
+namespace Otc.ProjectModel.Infra.EmailAdapter
 {
     public static class EmailAdapterServiceCollectionExtensions
     {

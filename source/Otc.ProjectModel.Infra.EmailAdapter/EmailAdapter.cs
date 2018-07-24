@@ -1,7 +1,7 @@
 ﻿using Otc.ProjectModel.Core.Domain.Adapters;
 using System.Threading.Tasks;
 
-namespace Otc.ProjectModel.Infra.Adapter.Email
+namespace Otc.ProjectModel.Infra.EmailAdapter
 {
     public class EmailAdapter : IEmailAdapter
     {
