@@ -27,6 +27,5 @@
 
             public string ZipCode { get; set; }
         }
-
     }
 }

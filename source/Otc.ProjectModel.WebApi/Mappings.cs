@@ -15,7 +15,7 @@ namespace Otc.ProjectModel.WebApi
                 c.CreateMap<Address, AddClientPost.AddressPost>();
 
                 //Post
-                c.CreateMap<AddClientPost, Client>();//.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ClientId));
+                c.CreateMap<AddClientPost, Client>();
                 c.CreateMap<AddClientPost.AddressPost, Address>();
                 c.CreateMap<AddClientSubscriptionPost, Subscription>();
             });
