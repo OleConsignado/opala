@@ -2,7 +2,6 @@
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +13,13 @@ namespace Otc.ProjectModel.Infra.Repository
     {
         private readonly IDbConnection dbConnection;
 
+        static ClientRepository() => SqlMapper.AddTypeMap(typeof(string), DbType.AnsiString);
+
         public ClientRepository(IDbConnection dbConnection)
         {
             this.dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
-            SqlMapper.AddTypeMap(typeof(string), DbType.AnsiString);
         }
-
+        
         public async Task AddClientAsync(Client client)
         {
             if (client == null)
@@ -96,10 +96,10 @@ namespace Otc.ProjectModel.Infra.Repository
 
         public async Task UpdateClientAsync(Client client)
         {
-            var clientParams = new DynamicParameters();
-            clientParams.Add("Id", client.Id, DbType.Guid);
-            clientParams.Add("Name", client.Name, DbType.AnsiString);
-            clientParams.Add("Email", client.Email, DbType.AnsiString);
+            //var clientParams = new DynamicParameters();
+            //clientParams.Add("Id", client.Id, DbType.Guid);
+            //clientParams.Add("Name", client.Name, DbType.AnsiString);
+            //clientParams.Add("Email", client.Email, DbType.AnsiString);
 
             var addressParams = new DynamicParameters();
             addressParams.Add("ClientId", client.Id, DbType.Guid);
@@ -116,7 +116,7 @@ namespace Otc.ProjectModel.Infra.Repository
 
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                if (await dbConnection.ExecuteAsync(queryClient, clientParams) > 0)
+                if (await dbConnection.ExecuteAsync(queryClient, client) > 0)
                     if (await dbConnection.ExecuteAsync(queryClientAddress, addressParams) > 0)
                         trans.Complete();
             }

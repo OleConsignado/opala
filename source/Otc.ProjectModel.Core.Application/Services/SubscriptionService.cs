@@ -42,6 +42,11 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)
         {
+            var client = await clientReadOnlyRepository.GetClientAsync(clientId);
+
+            if (client == null)
+                throw new ClientCoreException(ClientCoreError.ClientNotFound);
+
             var subscriptions = await subscriptionReadOnlyRepository.GetClientSubscriptionsAsync(clientId);
 
             return subscriptions;

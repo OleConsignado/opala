@@ -7,7 +7,6 @@ using Otc.Validations.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace Otc.ProjectModel.Core.Application.Services
 {
@@ -28,6 +27,14 @@ namespace Otc.ProjectModel.Core.Application.Services
             this.applicationConfiguration = applicationConfiguration ?? throw new ArgumentNullException(nameof(applicationConfiguration));
             this.subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
         }
+
+        public async Task<bool> ClientExists(Guid clientId)
+        {
+            var client = await GetClientAsync(clientId);
+
+            return client != null;
+        }
+
 
         public async Task AddClientAsync(Client client)
         {
@@ -62,6 +69,9 @@ namespace Otc.ProjectModel.Core.Application.Services
             if (client == null)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
+            if (!await ClientExists(client.Id))
+                throw new ClientCoreException(ClientCoreError.ClientNotFound);
+
             await clientWriteOnlyRepository.RemoveClientAsync(clientId);
         }
 
@@ -71,6 +81,9 @@ namespace Otc.ProjectModel.Core.Application.Services
                 throw new ArgumentNullException(nameof(client));
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
+
+            if (!await ClientExists(client.Id))
+                throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.UpdateClientAsync(client);
         }

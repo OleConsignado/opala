@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         {
             var client = Mapper.Map<ClientGet>(await clientService.GetClientAsync(clientId));
 
+            if (client == null)
+                return NotFound(ClientCoreError.ClientNotFound);
+
             return Ok(client);
         }
 
@@ -69,9 +73,16 @@ namespace Otc.ProjectModel.WebApi.Controllers
             var client = Mapper.Map<Client>(updateClientRequest);
             client.Id = clientId;
 
-            await clientService.UpdateClientAsync(client);
+            try
+            {
+                await clientService.UpdateClientAsync(client);
 
-            return Ok(client);
+                return Ok(client);
+            }
+            catch (ClientCoreException ex) when (ex.Errors.Any(c => c.Key == ClientCoreError.ClientNotFound.Key))
+            {
+                return NotFound(ClientCoreError.ClientNotFound);
+            }
         }
 
         /// <summary>
@@ -87,9 +98,16 @@ namespace Otc.ProjectModel.WebApi.Controllers
         {
             var subscription = Mapper.Map<Subscription>(addSubscriptionRequest);
 
-            await subscriptionService.AddSubscriptionAsync(subscription);
+            try
+            {
+                await subscriptionService.AddSubscriptionAsync(subscription);
 
-            return Ok(subscription);
+                return Ok(subscription);
+            }
+            catch(ClientCoreException ex) when (ex.Errors.Any(c => c.Key == ClientCoreError.ClientNotFound.Key))
+            {
+                return NotFound(ClientCoreError.ClientNotFound);
+            }
         }
 
         /// <summary>
@@ -102,9 +120,16 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
         public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId)
         {
-           var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+            try
+            {
+                var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
 
-            return Ok(subscriptions);
+                return Ok(subscriptions);
+            }
+            catch(ClientCoreException ex) when(ex.Errors.Any(c => c.Key == ClientCoreError.ClientNotFound.Key))
+            {
+                return NotFound(ClientCoreError.ClientNotFound);
+            }
         }
     }
 }
