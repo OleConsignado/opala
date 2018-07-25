@@ -55,13 +55,6 @@ namespace Otc.ProjectModel.Core.Application.Services
             return client;
         }
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptionsAsync(Guid clientId)
-        {
-            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
-
-            return subscriptions;
-        }
-
         public async Task RemoveClientAsync(Guid clientId)
         {
             var client = await clientReadOnlyRepository.GetClientAsync(clientId);
