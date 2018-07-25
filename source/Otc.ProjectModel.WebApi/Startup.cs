@@ -17,6 +17,7 @@ using Graceterm;
 using Otc.Extensions.Configuration;
 using Otc.ProjectModel.Infra.EmailAdapter;
 using Otc.ProjectModel.Infra.NotificationAdapter;
+using Otc.RequestTracking.AspNetCore;
 
 namespace Otc.ProjectModel.WebApi
 {
@@ -77,6 +78,11 @@ namespace Otc.ProjectModel.WebApi
 
             services.AddNotificationAdapter();
 
+            services.AddRequestTracking(requestTracker =>
+            {
+                requestTracker.Configure(Configuration.SafeGet<RequestTrackerConfiguration>());
+            });
+
             // Inicializa os mapeamentos feito com o AutoMapper
             Mappings.Initialize();
         }
@@ -84,8 +90,7 @@ namespace Otc.ProjectModel.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
+            app.UseRequestTracking();
 
             app.UseGraceterm(options =>
             {

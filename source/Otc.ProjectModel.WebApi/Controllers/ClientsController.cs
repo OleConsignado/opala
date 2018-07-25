@@ -7,7 +7,6 @@ using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.WebApi.Dtos;
-using Otc.Validations.Helpers;
 
 namespace Otc.ProjectModel.WebApi.Controllers
 {
@@ -31,10 +30,10 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns>Client</returns>
         [HttpGet("{clientId}")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(ClientResponse), 200)]
+        [ProducesResponseType(typeof(ClientGet), 200)]
         public async Task<IActionResult> GetClientAsync(Guid clientId)
         {
-            var client = Mapper.Map<ClientResponse>(await clientService.GetClientAsync(clientId));
+            var client = Mapper.Map<ClientGet>(await clientService.GetClientAsync(clientId));
 
             return Ok(client);
         }
@@ -46,11 +45,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns>Client</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(ClientRequest), 200)]
-        public async Task<IActionResult> AddClientAsync([FromBody] ClientRequest addClientRequest)
+        [ProducesResponseType(typeof(AddClientPost), 200)]
+        public async Task<IActionResult> AddClientAsync([FromBody] AddClientPost addClientRequest)
         {
-            ValidationHelper.ThrowValidationExceptionIfNotValid(addClientRequest);
-
             var client = Mapper.Map<Client>(addClientRequest);
 
             await clientService.AddClientAsync(client);
@@ -66,11 +63,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns>Client</returns>
         [HttpPut("{clientId}")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(ClientRequest), 200)]
-        public async Task<IActionResult> UpdateClientAsync(Guid clientId, [FromBody] ClientRequest updateClientRequest)
+        [ProducesResponseType(typeof(UpdateClientPut), 200)]
+        public async Task<IActionResult> UpdateClientAsync(Guid clientId, [FromBody] UpdateClientPut updateClientRequest)
         {
-            ValidationHelper.ThrowValidationExceptionIfNotValid(updateClientRequest);
-
             var client = Mapper.Map<Client>(updateClientRequest);
             client.Id = clientId;
 
@@ -87,11 +82,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [HttpPost("{clientId}/subscriptions")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
-        [ProducesResponseType(typeof(ClientRequest), 200)]
-        public async Task<IActionResult> AddClientSubscriptionAsync([FromBody] SubscriptionRequest addSubscriptionRequest)
+        [ProducesResponseType(typeof(AddClientSubscriptionPost), 200)]
+        public async Task<IActionResult> AddClientSubscriptionAsync([FromBody] AddClientSubscriptionPost addSubscriptionRequest)
         {
-            ValidationHelper.ThrowValidationExceptionIfNotValid(addSubscriptionRequest);
-
             var subscription = Mapper.Map<Subscription>(addSubscriptionRequest);
 
             await subscriptionService.AddSubscriptionAsync(subscription);
@@ -109,11 +102,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
         public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId)
         {
-
            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
 
             return Ok(subscriptions);
         }
-
     }
 }

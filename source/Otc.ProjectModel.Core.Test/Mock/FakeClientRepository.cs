@@ -11,36 +11,41 @@ namespace Otc.ProjectModel.Core.Test.Mock
         {
             if (client == null)
                 throw new NullReferenceException();
+
+            await new Task<Client>(() => new Client
+            {
+                Id = Guid.Parse(client.Id.ToString()),
+                Name = client.Name,
+                Email = client.Email,
+                Address = client.Address
+            });
         }
 
-        public Client GetClient(Guid clientId)
+        public async Task<Client> GetClientAsync(Guid clientId)
         {
-            if(clientId == Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"))
+            if (clientId == Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"))
             {
-                return new Client
+                return await new Task<Client>(() => new Client
                 {
                     Id = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"),
                     Name = "Luciano",
                     Email = "teste@teste.com",
                     Address = new Address
                     {
-                        Street = "Rua dos Testes",
-                        Number = "42",
-                        Neighborhood = "Vizinhança",
-                        City = "Megalópolis",
-                        Country = "Brézil",
-                        State = "LH",
+                        Street = "Rua teste",
+                        Number = "100",
+                        Neighborhood = "Centro",
+                        City = "Belo Horizonte",
+                        State = "MG",
+                        Country = "Brasil",
                         ZipCode = "123456"
                     }
-                };
+                });
             }
-
-            return null;
-        }
-
-        public Task<Client> GetClientAsync(Guid clientId)
-        {
-            throw new NotImplementedException();
+            else
+            {
+                return null;
+            }
         }
 
         public Task RemoveClientAsync(Guid clientId)

@@ -11,13 +11,13 @@ namespace Otc.ProjectModel.WebApi
             Mapper.Initialize(c =>
             {
                 //Get
-                c.CreateMap<Client, ClientResponse>();
-                c.CreateMap<Address, AddressDto>();
+                c.CreateMap<Client, ClientGet>();
+                c.CreateMap<Address, AddClientPost.AddressPost>();
 
                 //Post
-                c.CreateMap<ClientRequest, Client>();//.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ClientId));
-                c.CreateMap<AddressDto, Address>();
-                c.CreateMap<SubscriptionRequest, Subscription>();
+                c.CreateMap<AddClientPost, Client>();//.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ClientId));
+                c.CreateMap<AddClientPost.AddressPost, Address>();
+                c.CreateMap<AddClientSubscriptionPost, Subscription>();
             });
         }
     }
