@@ -45,14 +45,6 @@ namespace Otc.ProjectModel.Core.Domain.Services
         //// <exception cref="DomainBase.Exceptions.ValidationCoreException"></exception>
         Task UpdateClientAsync(Client client);
 
-        /// <summary>
-        /// Lista as Assinaturas do Cliente
-        /// </summary>
-        /// <param name="clientId">Identificador do Cliente</param>
-        /// <returns></returns>
-        /// <exception cref="SubscriptionCoreException"></exception>
-        Task<IEnumerable<Subscription>> GetSubscriptionsAsync(Guid clientId);
-
         //Todo Add HasSubscription
     }
 }
