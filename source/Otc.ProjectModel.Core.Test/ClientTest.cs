@@ -7,6 +7,8 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.Core.Test.Mock;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -27,6 +29,43 @@ namespace Otc.ProjectModel.Core.Test
         {
             var services = new ServiceCollection();
 
+            CreateAddress();
+
+            CreateClient();
+
+            var emailAdapter = new Mock<IEmailAdapter>();
+
+            services.AddLogging();
+
+            services.AddScoped<IClientReadOnlyRepository, FakeClientRepository>();
+            services.AddScoped<IClientWriteOnlyRepository, FakeClientRepository>();
+            services.AddScoped<ISubscriptionReadOnlyRepository, FakeSubscriptionRepository>();
+            services.AddScoped<ISubscriptionWriteOnlyRepository, FakeSubscriptionRepository>();
+            services.AddScoped<IEmailAdapter, FakeEmailAdapter>();
+            services.AddScoped<INotificationAdapter, FakeNotificationAdapter>();
+
+            services.AddScoped(c => emailAdapter.Object);
+
+            services.AddProjectModelCoreApplication(c => c.Configure(new ApplicationConfiguration { EmailFrom = "meu.teste@teste.com" }));
+
+            serviceProvider = services.BuildServiceProvider();
+
+            clientService = serviceProvider.GetService<IClientService>();
+            subscriptionService = serviceProvider.GetService<ISubscriptionService>();
+        }
+
+        private void CreateClient()
+        {
+            client = new Client
+            {
+                Name = "Luciano",
+                Email = "teste@teste.com",
+                Address = address
+            };
+        }
+
+        private void CreateAddress()
+        {
             address = new Address
             {
                 Street = "Rua teste",
@@ -37,32 +76,6 @@ namespace Otc.ProjectModel.Core.Test
                 Country = "Brasil",
                 ZipCode = "123456"
             };
-
-            client = new Client
-            {
-                Name = "Luciano",
-                Email = "teste@teste.com",
-                Address = address
-            };
-
-            var emailAdapter = new Mock<IEmailAdapter>();
-
-            services.AddLogging();
-
-            services.AddScoped<IClientReadOnlyRepository, FakeClientRepository>();
-            services.AddScoped<IClientWriteOnlyRepository, FakeClientRepository>();
-            services.AddScoped<IEmailAdapter, FakeEmailAdapter>();
-
-            services.AddScoped(c => emailAdapter.Object);
-
-            services.AddProjectModelCoreApplication(c => c.Configure(new ApplicationConfiguration { EmailFrom = "meu.teste@teste.com" }));
-
-            serviceProvider = services.BuildServiceProvider();
-
-            clientService = serviceProvider.GetService<IClientService>();
-            subscriptionService = serviceProvider.GetService<ISubscriptionService>();
-            paymentService = serviceProvider.GetService<IPaymentService>();
-
         }
 
         #region -- Client --
@@ -92,6 +105,7 @@ namespace Otc.ProjectModel.Core.Test
         {
             var subscription = new Subscription
             {
+                ClientId = Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"),
                 Active = true,
                 CreatedDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(10),
@@ -109,11 +123,12 @@ namespace Otc.ProjectModel.Core.Test
                 Address = address
             };
 
+            subscription.Payments = new List<Payment>();
             subscription.Payments.Add(payment);
 
             subscriptionService.AddSubscriptionAsync(subscription);
 
-            //Assert.True(client.HasSubscription());
+            Assert.True(client.Subscriptions.Any());
         }
 
         //[Fact]

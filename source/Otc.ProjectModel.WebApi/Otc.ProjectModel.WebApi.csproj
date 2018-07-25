@@ -28,8 +28,8 @@
     <PackageReference Include="Otc.ExceptionHandling.Abstractions" Version="1.0.1" />
     <PackageReference Include="Otc.Extensions.Configuration" Version="1.0.2" />
     <PackageReference Include="Otc.Mvc.Filters" Version="1.0.2" />
+    <PackageReference Include="Otc.RequestTracking.AspNetCore" Version="1.0.0-v100-alpha2-build3" />
     <PackageReference Include="Otc.SwaggerSchemaFiltering" Version="1.0.1" />
-    <PackageReference Include="Otc.Validations.Helpers" Version="1.0.1" />
     <PackageReference Include="Serilog" Version="2.7.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />

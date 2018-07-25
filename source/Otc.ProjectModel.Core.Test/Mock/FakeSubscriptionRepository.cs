@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Test.Mock
 {
-    public class FakeSubscriptionRepository : ISubscriptionReadOnlyRepository
+    public class FakeSubscriptionRepository : ISubscriptionReadOnlyRepository, ISubscriptionWriteOnlyRepository
     {
-        public async Task AddSubscriptionAsync(Subscription subscription)
+        public Task AddSubscriptionAsync(Subscription subscription)
         {
             throw new NotImplementedException();
         }
@@ -18,7 +18,7 @@ namespace Otc.ProjectModel.Core.Test.Mock
             throw new NotImplementedException();
         }
 
-        public async Task<Subscription> GetSubscriptionAsync(Guid id)
+        public Task<Subscription> GetSubscriptionAsync(Guid id)
         {
             throw new NotImplementedException();
         }
