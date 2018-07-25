@@ -11,6 +11,13 @@ namespace Otc.ProjectModel.Core.Domain.Services
         //Todo Exception
 
         /// <summary>
+        /// Verifica se um Cliente existe.
+        /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <returns>True ou False</returns>
+        Task<bool> ClientExists(Guid clientId);
+
+        /// <summary>
         /// Retorna um Cliente
         /// </summary>
         /// <param name="clientId">Identificador</param>

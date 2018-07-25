@@ -18,6 +18,10 @@ namespace Otc.ProjectModel.WebApi
                 c.CreateMap<AddClientPost, Client>();
                 c.CreateMap<AddClientPost.AddressPost, Address>();
                 c.CreateMap<AddClientSubscriptionPost, Subscription>();
+
+                //Put
+                c.CreateMap<UpdateClientPut, Client>();
+                c.CreateMap<UpdateClientPut.AddressPut, Address>();
             });
         }
     }
