@@ -19,7 +19,6 @@ namespace Otc.ProjectModel.Core.Test
         private IServiceProvider serviceProvider;
         private IClientService clientService;
         private ISubscriptionService subscriptionService;
-        private IPaymentService paymentService;
 
         private Address address;
         private Client client;
@@ -119,8 +118,7 @@ namespace Otc.ProjectModel.Core.Test
                 ExpireDate = DateTime.Now.AddDays(5),
                 Total = 10,
                 TotalPaid = 10,
-                Payer = "Tabajara Company",
-                Address = address
+                Payer = "Tabajara Company"
             };
 
             subscription.Payments = new List<Payment>();

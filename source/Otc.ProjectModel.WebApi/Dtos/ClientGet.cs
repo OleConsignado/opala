@@ -10,6 +10,8 @@ namespace Otc.ProjectModel.WebApi.Dtos
 
         public string Email { get; set; }
 
+        public bool IsActive { get; set; }
+
        public AddressGet Address { get; set; }
 
         /// <summary>

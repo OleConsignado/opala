@@ -5,7 +5,6 @@ using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.Validations.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Application.Services
@@ -35,7 +34,6 @@ namespace Otc.ProjectModel.Core.Application.Services
             return client != null;
         }
 
-
         public async Task AddClientAsync(Client client)
         {
             if (client == null)
@@ -55,17 +53,12 @@ namespace Otc.ProjectModel.Core.Application.Services
             return client;
         }
 
-        public async Task RemoveClientAsync(Guid clientId)
+        public async Task EnableDisableClientAsync(Guid clientId, bool isActive)
         {
-            var client = await clientReadOnlyRepository.GetClientAsync(clientId);
-
-            if (client == null)
+            if (!await ClientExists(clientId))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
-            if (!await ClientExists(client.Id))
-                throw new ClientCoreException(ClientCoreError.ClientNotFound);
-
-            await clientWriteOnlyRepository.RemoveClientAsync(clientId);
+            await clientWriteOnlyRepository.EnableDisableClientAsync(clientId, isActive);
         }
 
         public async Task UpdateClientAsync(Client client)

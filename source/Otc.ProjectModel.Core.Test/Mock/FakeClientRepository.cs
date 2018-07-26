@@ -21,6 +21,11 @@ namespace Otc.ProjectModel.Core.Test.Mock
             });
         }
 
+        public Task EnableDisableClientAsync(Guid clientId, bool isActive)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Client> GetClientAsync(Guid clientId)
         {
             if (clientId == Guid.Parse("5D502C13-8184-499E-8A02-A6C6A1C21188"))

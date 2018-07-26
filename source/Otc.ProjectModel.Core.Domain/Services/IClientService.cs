@@ -32,11 +32,12 @@ namespace Otc.ProjectModel.Core.Domain.Services
         Task AddClientAsync(Client client);
 
         /// <summary>
-        /// Exclui um Cliente
+        /// HAbilita ou Desabilita um Cliente
         /// </summary>
         /// <param name="clientId">Identificador</param>
+        /// <param name="isActive">true ou false</param>
         /// <exception cref="Exceptions.ClientCoreException"></exception>
-        Task RemoveClientAsync(Guid clientId);
+        Task EnableDisableClientAsync(Guid clientId, bool isActive);
 
         /// <summary>
         /// Atualiza um Cliente

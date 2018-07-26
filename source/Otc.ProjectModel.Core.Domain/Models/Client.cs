@@ -22,6 +22,8 @@ namespace Otc.ProjectModel.Core.Domain.Models
         [EmailAddress(ErrorKey = "400.003")]
         public string Email { get; set; }
 
+        public bool IsActive { get; set; }
+
         public Address Address { get; set; }
     }
 }
