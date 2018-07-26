@@ -60,6 +60,22 @@ namespace Otc.ProjectModel.WebApi.Controllers
         }
 
         /// <summary>
+        /// Habilita ou desabilita um Cliente
+        /// </summary>
+        /// <param name="clientId">Identificador</param>
+        /// <param name="isActive">True ou False</param>
+        /// <returns></returns>
+        [HttpPatch("{clientId}/status")]
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(AddClientPost), 200)]
+        public async Task<IActionResult> EnableDisableClientAsync(Guid clientId, [FromQuery] bool isActive)
+        {
+            await clientService.EnableDisableClientAsync(clientId, isActive);
+
+            return Ok();
+        }
+
+        /// <summary>
         /// Atualiza um Cliente
         /// </summary>
         /// <param name="clientId"></param>

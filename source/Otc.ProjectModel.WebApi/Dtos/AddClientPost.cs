@@ -4,8 +4,6 @@ namespace Otc.ProjectModel.WebApi.Dtos
 {
     public class AddClientPost
     {
-        public Guid ClientId { get; set; }
-
         public string Name { get; set; }
 
         public string Email { get; set; }
