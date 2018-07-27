@@ -7,5 +7,7 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
     public interface IClientReadOnlyRepository
     {
         Task<Client> GetClientAsync(Guid clientId);
+
+        Task<Client> GetClientWithSubscriptionsAsync(Guid clientId);
     }
 }

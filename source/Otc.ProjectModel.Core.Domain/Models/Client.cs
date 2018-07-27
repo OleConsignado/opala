@@ -11,7 +11,7 @@ namespace Otc.ProjectModel.Core.Domain.Models
 
         }
 
-        public virtual IEnumerable<Subscription> Subscriptions { get; set; }
+        public ICollection<Subscription> Subscriptions { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
