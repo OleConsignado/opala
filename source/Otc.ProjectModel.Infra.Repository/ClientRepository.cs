@@ -2,6 +2,7 @@
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +57,39 @@ namespace Otc.ProjectModel.Infra.Repository
             }, clientParams, splitOn: "Id,Street");
 
             return client.SingleOrDefault();
+        }
+
+        public async Task<Client> GetClientWithSubscriptionsAsync(Guid clientId)
+        {
+            var clientParams = new DynamicParameters();
+            clientParams.Add("Id", clientId, DbType.Guid);
+
+            var query = @"select c.Id, c.Name, c.Email, c.IsActive, 
+                                c.Street, c.Number, c.Neighborhood, c.City, c.State, c.Country, c.ZipCode,
+                                s.ClientId, s.Id, s.CreatedDate, s.LastUpdatedDate, s.ExpireDate, s.Active, s.Name 
+                                from Client c left join Subscription s on c.Id = s.ClientId Where c.Id = @Id";
+
+            var subscriptions = new Dictionary<Guid, Client>();
+
+            var client = await dbConnection.QueryAsync<Client, Address, Subscription, Client>(query, (cli, add, subs) =>
+            {
+                cli.Address = add;
+
+                Client clientEntry = null;
+
+                if(!subscriptions.TryGetValue(cli.Id, out clientEntry))
+                {
+                    clientEntry = cli;
+                    clientEntry.Subscriptions = new List<Subscription>();
+                    subscriptions.Add(clientEntry.Id, clientEntry);
+                }
+
+                clientEntry.Subscriptions.Add(subs);
+
+                return clientEntry;
+            }, clientParams, splitOn: "Id,Street,ClientId");
+
+            return client.FirstOrDefault();
         }
 
         public async Task EnableDisableClientAsync(Guid clientId, bool isActive)

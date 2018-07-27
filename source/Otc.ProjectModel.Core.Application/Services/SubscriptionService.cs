@@ -27,7 +27,7 @@ namespace Otc.ProjectModel.Core.Application.Services
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            var client = await clientReadOnlyRepository.GetClientAsync(subscription.ClientId);
+            var client = await clientReadOnlyRepository.GetClientWithSubscriptionsAsync(subscription.ClientId);
 
             if (client == null)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
