@@ -53,7 +53,7 @@ namespace Otc.ProjectModel.Infra.NotificationAdapter
                 {
                     string data = await response.Content.ReadAsStringAsync();
 
-                    throw new Exception(data);
+                    //Todo - modelar como uma excecao de sistema ou de dominio conforme o erro
                 }
             }
         }

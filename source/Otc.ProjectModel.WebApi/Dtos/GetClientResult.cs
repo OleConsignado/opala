@@ -2,7 +2,7 @@
 
 namespace Otc.ProjectModel.WebApi.Dtos
 {
-    public class ClientGet
+    public class GetClientResult
     {
         public Guid Id { get; set; }
 

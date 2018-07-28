@@ -31,10 +31,10 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns>Client</returns>
         [HttpGet("{clientId}")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(ClientGet), 200)]
+        [ProducesResponseType(typeof(GetClientResult), 200)]
         public async Task<IActionResult> GetClientAsync(Guid clientId)
         {
-            var client = Mapper.Map<ClientGet>(await clientService.GetClientAsync(clientId));
+            var client = Mapper.Map<GetClientResult>(await clientService.GetClientAsync(clientId));
 
             if (client == null)
                 return NotFound(ClientCoreError.ClientNotFound);

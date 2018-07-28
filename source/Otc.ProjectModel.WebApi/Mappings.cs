@@ -11,7 +11,7 @@ namespace Otc.ProjectModel.WebApi
             Mapper.Initialize(c =>
             {
                 //Get
-                c.CreateMap<Client, ClientGet>();
+                c.CreateMap<Client, GetClientResult>();
                 c.CreateMap<Address, AddClientPost.AddressPost>();
 
                 //Post

@@ -75,9 +75,7 @@ namespace Otc.ProjectModel.Infra.Repository
             {
                 cli.Address = add;
 
-                Client clientEntry = null;
-
-                if(!subscriptions.TryGetValue(cli.Id, out clientEntry))
+                if (!subscriptions.TryGetValue(cli.Id, out Client clientEntry))
                 {
                     clientEntry = cli;
                     clientEntry.Subscriptions = new List<Subscription>();
