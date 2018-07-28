@@ -14,7 +14,7 @@
 
 create table Subscription(
 	Id  uniqueidentifier primary key, 
-	ClientId uniqueidentifier foreign key references Client(id), 
+	ClientId uniqueidentifier foreign key references Client(Id), 
 	Name varchar(max), 
 	CreatedDate datetime, 
 	LastUpdatedDate datetime, 
