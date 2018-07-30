@@ -8,6 +8,8 @@ namespace Otc.ProjectModel.Infra.EmailAdapter
         public async Task SendAsync(string to, string from, string subject, string body)
         {
             // Implementar um envio de email
+
+            await Task.CompletedTask;
         }
     }
 }

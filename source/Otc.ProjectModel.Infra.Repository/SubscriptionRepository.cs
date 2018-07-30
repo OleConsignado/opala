@@ -11,7 +11,7 @@ namespace Otc.ProjectModel.Infra.Repository
 {
     public class SubscriptionRepository : ISubscriptionReadOnlyRepository, ISubscriptionWriteOnlyRepository
     {
-        private IDbConnection dbConnection { get; }
+        private readonly IDbConnection dbConnection;
 
         public SubscriptionRepository(IDbConnection dbConnection)
         {

@@ -19,9 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Otc.ProjectModel.Infra.Repo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Otc.ProjectModel.WebApi", "Otc.ProjectModel.WebApi\Otc.ProjectModel.WebApi.csproj", "{61675B6F-0432-424F-A20C-4AD418A39EEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otc.ProjectModel.Infra.EmailAdapter", "Otc.ProjectModel.Infra.EmailAdapter\Otc.ProjectModel.Infra.EmailAdapter.csproj", "{903061B1-C610-4659-8502-9807C7ED29BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Otc.ProjectModel.Infra.EmailAdapter", "Otc.ProjectModel.Infra.EmailAdapter\Otc.ProjectModel.Infra.EmailAdapter.csproj", "{903061B1-C610-4659-8502-9807C7ED29BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otc.ProjectModel.Infra.NotificationAdapter", "Otc.ProjectModel.Infra.NotificationAdapter\Otc.ProjectModel.Infra.NotificationAdapter.csproj", "{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Otc.ProjectModel.Infra.NotificationAdapter", "Otc.ProjectModel.Infra.NotificationAdapter\Otc.ProjectModel.Infra.NotificationAdapter.csproj", "{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2FE3487-41D2-45B2-ACEB-B2CB1291A49A}"
+	ProjectSection(SolutionItems) = preProject
+		DbSchema.sql = DbSchema.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
