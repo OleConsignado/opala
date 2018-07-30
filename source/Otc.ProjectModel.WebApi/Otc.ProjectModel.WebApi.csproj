@@ -23,6 +23,7 @@
     <PackageReference Include="Graceterm" Version="1.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Otc.ExceptionHandling" Version="1.1.1" />
     <PackageReference Include="Otc.ExceptionHandling.Abstractions" Version="1.0.1" />
     <PackageReference Include="Otc.Extensions.Configuration" Version="1.0.2" />
