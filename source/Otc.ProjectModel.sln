@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Core", "0 Core", "{2BC893BA-646F-4FB5-8CDF-226B57E199AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Core", "1 Core", "{2BC893BA-646F-4FB5-8CDF-226B57E199AE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Infra", "1 Infra", "{17D0AA5F-1923-4D63-B57D-E3E0A0566694}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 Infra", "5 Infra", "{17D0AA5F-1923-4D63-B57D-E3E0A0566694}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 Presenter", "2 Presenter", "{9FBE24C2-C788-4694-AD46-73B129E83FE2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9 Presenter", "9 Presenter", "{9FBE24C2-C788-4694-AD46-73B129E83FE2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Otc.ProjectModel.Core.Domain", "Otc.ProjectModel.Core.Domain\Otc.ProjectModel.Core.Domain.csproj", "{3977F25D-AA3F-46C0-8F53-608125F14D08}"
 EndProject
