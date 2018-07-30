@@ -54,10 +54,10 @@ namespace Otc.ProjectModel.Core.Test
         private void ClientReadOnlyRepositoryMock(Mock<IClientReadOnlyRepository> clientReadOnlyRepoMock)
         {
             clientReadOnlyRepoMock
-                .Setup(s => s.GetClientAsync(clientId))
+                .Setup(s => s.GetClientAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799")))
                 .ReturnsAsync(new Client
                 {
-                    Id = clientId,
+                    Id = Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799"),
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
@@ -75,7 +75,7 @@ namespace Otc.ProjectModel.Core.Test
                 });
 
             clientReadOnlyRepoMock
-                .Setup(s => s.GetClientAsync(Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68")))
+                .Setup(s => s.GetClientWithSubscriptionsAsync(Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68")))
                 .ReturnsAsync(new Client
                 {
                     Name = "Ze Tabajara",
@@ -95,10 +95,38 @@ namespace Otc.ProjectModel.Core.Test
                     {
                         new Subscription
                         {
-                            Active = true,
+                            Active = false,
                             ClientId = Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68"),
                             Name = "Assinatura semanal"
                         }
+                    }
+                });
+
+            clientReadOnlyRepoMock
+                .Setup(s => s.GetClientWithSubscriptionsAsync(Guid.Parse("EFFE408A-5312-4094-B8CA-6B005A307FAF")))
+                .ReturnsAsync(new Client
+                {
+                    Name = "Ze Tabajara",
+                    Email = "ze@tabajara.com",
+                    IsActive = true,
+                    Address = new Address
+                    {
+                        Street = "Rua dos testes",
+                        Number = "42",
+                        Neighborhood = "Bairro Novo",
+                        City = "Cidade",
+                        Country = "Brasil",
+                        State = "MG",
+                        ZipCode = "123456"
+                    },
+                    Subscriptions = new List<Subscription>
+                    {
+                                    new Subscription
+                                    {
+                                        Active = true,
+                                        ClientId = Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68"),
+                                        Name = "Assinatura semanal"
+                                    }
                     }
                 });
 
@@ -284,7 +312,7 @@ namespace Otc.ProjectModel.Core.Test
 
             var subscription = new Subscription
             {
-                ClientId = clientId,
+                ClientId = Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68"),
                 Active = true,
                 CreatedDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(10),
@@ -313,7 +341,7 @@ namespace Otc.ProjectModel.Core.Test
 
             var subscription = new Subscription
             {
-                ClientId = Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68"),
+                ClientId = Guid.Parse("EFFE408A-5312-4094-B8CA-6B005A307FAF"),
                 Active = true,
                 CreatedDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(10),
