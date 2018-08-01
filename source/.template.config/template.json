@@ -30,10 +30,10 @@
           "description": "Contains only Domain, Application, Test and WebApi projects"
         }
       ],
-      "replaces": "user-choise",
+      "replaces": "user-choice",
       "onlyIf": [
         {
-          "after": "\"user-choise\": \""
+          "after": "\"user-choice\": \""
         }
       ]
     },
@@ -76,11 +76,11 @@
     },
     "Basic": {
       "type": "computed",
-      "value": "(use-cases == \"basic\")"
+      "value": "(user-choice == \"basic\")"
     },
     "Full": {
       "type": "computed",
-      "value": "(use-cases == \"full\")"
+      "value": "(user-choice == \"full\")"
     },
     "EntityFramework": {
       "type": "computed",
@@ -89,7 +89,7 @@
     "Dapper": {
       "type": "computed",
       "value": "(data-access == \"dapper\")"
-    },
+    }
   },
   "sources": [
     {
@@ -101,9 +101,9 @@
         {
           "condition": "(Basic)",
           "exclude": [
-            "Otc.ProjectModel.Infra.EmailAdapter/*.cs",
-            "Otc.ProjectModel.Infra.NotificationAdapter/*.cs",
-            "Otc.ProjectModel.Infra.Repository/*.cs"
+            "Otc.ProjectModel.Infra.EmailAdapter/**/*.cs",
+            "Otc.ProjectModel.Infra.NotificationAdapter/**/*.cs",
+            "Otc.ProjectModel.Infra.Repository/**/*.cs"
           ]
         }
       ]
