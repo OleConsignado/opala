@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Otc.ProjectModel.Core.Domain.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace Otc.ProjectModel.Core.Domain.Adapters
@@ -12,6 +13,6 @@ namespace Otc.ProjectModel.Core.Domain.Adapters
         /// <param name="message">Mensagem</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">Excessão de sistema</exception>
-        Task SendAsync(string number, string message);
+        Task<NotificationResult> SendAsync(string number, string message);
     }
 }

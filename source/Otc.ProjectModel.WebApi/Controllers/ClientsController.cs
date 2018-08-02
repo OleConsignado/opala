@@ -102,6 +102,19 @@ namespace Otc.ProjectModel.WebApi.Controllers
         }
 
         /// <summary>
+        /// Remove um Cliente
+        /// </summary>
+        /// <param name="clientId">Identificador</param>
+        /// <returns></returns>
+        [HttpDelete("clientId")]
+        public async Task<IActionResult> RemoveClientAsync(Guid clientId)
+        {
+            await clientService.RemoveClientAsync(clientId);
+
+            return Ok();
+        }
+
+        /// <summary>
         /// Inclui uma Assinatura para um Cliente
         /// </summary>
         /// <param name="addSubscriptionRequest">Client</param>

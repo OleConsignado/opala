@@ -8,6 +8,8 @@ namespace Otc.ProjectModel.WebApi.Dtos
 
         public string Email { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public AddressPost Address { get; set; }
 
         /// <summary>

@@ -2,10 +2,11 @@
 using Otc.ProjectModel.Core.Domain.Adapters;
 using System;
 using System.Text;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Otc.ProjectModel.Infra.NotificationAdapter.Exceptions;
+using Otc.ProjectModel.Core.Domain.Models;
 
 namespace Otc.ProjectModel.Infra.NotificationAdapter
 {
@@ -18,7 +19,7 @@ namespace Otc.ProjectModel.Infra.NotificationAdapter
             this.notificationAdapterConfiguration = notificationAdapterConfiguration ?? throw new ArgumentNullException(nameof(notificationAdapterConfiguration));
         }
 
-        public async Task SendAsync(string number, string message)
+        public async Task<NotificationResult> SendAsync(string number, string message)
         {
             if (number == null)
                 throw new ArgumentNullException(nameof(number));
@@ -41,19 +42,23 @@ namespace Otc.ProjectModel.Infra.NotificationAdapter
                 var content = new StringContent(postedData, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(@"api/Sms/EnviarSms", content);
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
-                    //Todo - Faz alguma coisa com o retorno, caso precise
+                    string data = await response.Content.ReadAsStringAsync();
+                    var notificationResponse = JsonConvert.DeserializeObject<NotificationResponse>(data);
 
-                    //string data = response.Content.ReadAsStringAsync().Result;
-                    //var notificationResponse = JsonConvert.DeserializeObject<NotificationResponse>(data);
-                    //return notificationResponse;
+                    return new NotificationResult
+                    {
+                        EnvioId = notificationResponse.Id,
+                        Response = notificationResponse.Response,
+                        Status = notificationResponse.Status
+                    };
                 }
                 else
                 {
                     string data = await response.Content.ReadAsStringAsync();
 
-                    //Todo - modelar como uma excecao de sistema ou de dominio conforme o erro
+                    throw new NotificationAdapterException(data, response.StatusCode);
                 }
             }
         }
