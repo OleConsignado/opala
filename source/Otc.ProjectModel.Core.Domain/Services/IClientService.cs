@@ -44,6 +44,14 @@ namespace Otc.ProjectModel.Core.Domain.Services
         //// <exception cref="DomainBase.Exceptions.ValidationCoreException"></exception>
         Task UpdateClientAsync(Client client);
 
+        /// <summary>
+        /// Exclui um Cliente
+        /// </summary>
+        /// <param name="clientId">Identificador</param>
+        /// <returns></returns>
+        /// <exception cref="Exceptions.ClientCoreException"></exception>
+        Task RemoveClientAsync(Guid clientId);
+
         //Todo Add HasSubscription
     }
 }

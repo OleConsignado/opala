@@ -11,5 +11,7 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
         Task EnableDisableClientAsync(Guid clientId, bool isActive);
 
         Task UpdateClientAsync(Client client);
+
+        Task RemoveClientAsync(Guid clientId);
     }
 }

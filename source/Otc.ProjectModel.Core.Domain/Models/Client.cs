@@ -25,5 +25,8 @@ namespace Otc.ProjectModel.Core.Domain.Models
         public bool IsActive { get; set; }
 
         public Address Address { get; set; }
+
+        [Required(ErrorKey = "400.004")]
+        public string PhoneNumber { get; set; }
     }
 }

@@ -29,9 +29,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task<bool> ClientExists(Guid clientId)
         {
-            var client = await GetClientAsync(clientId);
-
-            return client != null;
+            return await clientReadOnlyRepository.ClientExistsAsync(clientId);
         }
 
         public async Task AddClientAsync(Client client)
@@ -43,7 +41,8 @@ namespace Otc.ProjectModel.Core.Application.Services
 
             await clientWriteOnlyRepository.AddClientAsync(client);
 
-            await emailAdapter.SendAsync(client.Email, applicationConfiguration.EmailFrom, "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
+            //Todo Disable for integration tests
+            //await emailAdapter.SendAsync(client.Email, applicationConfiguration.EmailFrom, "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
         }
 
         public async Task<Client> GetClientAsync(Guid clientId)
@@ -72,6 +71,14 @@ namespace Otc.ProjectModel.Core.Application.Services
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.UpdateClientAsync(client);
+        }
+
+        public async Task RemoveClientAsync(Guid clientId)
+        {
+            if (!await ClientExists(clientId))
+                throw new ClientCoreException(ClientCoreError.ClientNotFound);
+
+            await clientWriteOnlyRepository.RemoveClientAsync(clientId);
         }
     }
 }

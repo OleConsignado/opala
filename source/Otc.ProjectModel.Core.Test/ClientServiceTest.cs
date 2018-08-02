@@ -27,6 +27,7 @@ namespace Otc.ProjectModel.Core.Test
             var subscriptionWriteOnlyRepoMock = new Mock<ISubscriptionWriteOnlyRepository>();
 
             var emailAdapter = new Mock<IEmailAdapter>();
+            var notificationAdapter = new Mock<INotificationAdapter>();
 
             ClientReadOnlyRepositoryMock(clientReadOnlyRepoMock);
             ClientReadWriteRepositoryMock(clientWriteOnlyRepoMock);
@@ -40,6 +41,8 @@ namespace Otc.ProjectModel.Core.Test
             services.AddTransient(t => clientReadOnlyRepoMock.Object);
 
             services.AddScoped(c => emailAdapter.Object);
+            services.AddScoped(c => notificationAdapter.Object);
+
             services.AddTransient(t => clientWriteOnlyRepoMock.Object);
             services.AddTransient(t => clientWriteOnlyRepoMock.Object);
             services.AddTransient(t => subscriptionReadOnlyRepoMock.Object);
@@ -61,6 +64,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -81,6 +85,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -109,6 +114,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -142,6 +148,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -161,6 +168,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = true,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -180,6 +188,7 @@ namespace Otc.ProjectModel.Core.Test
                     Name = "Ze Tabajara",
                     Email = "ze@tabajara.com",
                     IsActive = false,
+                    PhoneNumber = "31985632112",
                     Address = new Address
                     {
                         Street = "Rua dos testes",
@@ -240,6 +249,7 @@ namespace Otc.ProjectModel.Core.Test
                 Name = "Ze Tabajara",
                 Email = "ze@tabajara.com",
                 IsActive = true,
+                PhoneNumber = "31985632112",
                 Address = new Address
                 {
                     Street = "Rua dos testes",
@@ -266,6 +276,7 @@ namespace Otc.ProjectModel.Core.Test
             {
                 Name = "Lu",
                 Email = "novo@teste.com",
+                PhoneNumber = "31985632112",
                 Address = new Address
                 {
                     Street = "Rua teste",
@@ -348,6 +359,14 @@ namespace Otc.ProjectModel.Core.Test
             };
 
             await Assert.ThrowsAsync<SubscriptionCoreException>(async () => await subscriptionService.AddSubscriptionAsync(subscription));
+        }
+
+        [Fact]
+        public async Task Throw_Exception_When_Try_Exclude_Client_Not_Exists()
+        {
+            var clientService = serviceProvider.GetService<IClientService>();
+
+            await Assert.ThrowsAsync<ClientCoreException>(async () => await clientService.RemoveClientAsync(Guid.Parse("5472A672-6D46-4DE4-92B1-BC61643F4938")));
         }
     }
 }

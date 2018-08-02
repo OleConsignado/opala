@@ -1,4 +1,5 @@
-﻿using Otc.ProjectModel.Core.Domain.Exceptions;
+﻿using Otc.ProjectModel.Core.Domain.Adapters;
+using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
 using Otc.ProjectModel.Core.Domain.Services;
@@ -14,12 +15,14 @@ namespace Otc.ProjectModel.Core.Application.Services
         private readonly ISubscriptionReadOnlyRepository subscriptionReadOnlyRepository;
         private readonly ISubscriptionWriteOnlyRepository subscriptionWriteOnlyRepository;
         private readonly IClientReadOnlyRepository clientReadOnlyRepository;
+        private readonly INotificationAdapter notificationAdapter;
 
-        public SubscriptionService(ISubscriptionReadOnlyRepository subscriptionReadOnlyRepository, ISubscriptionWriteOnlyRepository subscriptionWriteOnlyRepository, IClientReadOnlyRepository clientReadOnlyRepository)
+        public SubscriptionService(ISubscriptionReadOnlyRepository subscriptionReadOnlyRepository, ISubscriptionWriteOnlyRepository subscriptionWriteOnlyRepository, IClientReadOnlyRepository clientReadOnlyRepository, INotificationAdapter notificationAdapter)
         {
             this.subscriptionReadOnlyRepository = subscriptionReadOnlyRepository ?? throw new ArgumentNullException(nameof(subscriptionReadOnlyRepository));
             this.subscriptionWriteOnlyRepository = subscriptionWriteOnlyRepository ?? throw new ArgumentNullException(nameof(subscriptionWriteOnlyRepository));
             this.clientReadOnlyRepository = clientReadOnlyRepository ?? throw new ArgumentNullException(nameof(clientReadOnlyRepository));
+            this.notificationAdapter = notificationAdapter ?? throw new ArgumentNullException(nameof(notificationAdapter));
         }
 
         public async Task AddSubscriptionAsync(Subscription subscription)
@@ -38,6 +41,8 @@ namespace Otc.ProjectModel.Core.Application.Services
                 throw new SubscriptionCoreException().AddError(SubscriptionCoreError.SubscriptionIsActive);
 
             await subscriptionWriteOnlyRepository.AddSubscriptionAsync(subscription);
+
+            await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
         }
 
         public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)

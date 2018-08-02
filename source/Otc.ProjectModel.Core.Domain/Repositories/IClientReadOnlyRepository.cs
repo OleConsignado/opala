@@ -9,5 +9,8 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
         Task<Client> GetClientAsync(Guid clientId);
 
         Task<Client> GetClientWithSubscriptionsAsync(Guid clientId);
+
+        Task<bool> ClientExistsAsync(Guid clientId);
+
     }
 }
