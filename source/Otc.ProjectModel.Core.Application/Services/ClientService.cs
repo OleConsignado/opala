@@ -27,9 +27,11 @@ namespace Otc.ProjectModel.Core.Application.Services
             this.subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
         }
 
-        public async Task<bool> ClientExists(Guid clientId)
+        public async Task<bool> ClientExistsAsync(Guid clientId)
         {
-            return await clientReadOnlyRepository.ClientExistsAsync(clientId);
+            var result = await clientReadOnlyRepository.ClientExistsAsync(clientId);
+
+            return result;
         }
 
         public async Task AddClientAsync(Client client)
@@ -54,7 +56,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task EnableDisableClientAsync(Guid clientId, bool isActive)
         {
-            if (!await ClientExists(clientId))
+            if (!await ClientExistsAsync(clientId))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.EnableDisableClientAsync(clientId, isActive);
@@ -67,7 +69,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
-            if (!await ClientExists(client.Id))
+            if (!await ClientExistsAsync(client.Id))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.UpdateClientAsync(client);
@@ -75,7 +77,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task RemoveClientAsync(Guid clientId)
         {
-            if (!await ClientExists(clientId))
+            if (!await ClientExistsAsync(clientId))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.RemoveClientAsync(clientId);

@@ -9,6 +9,7 @@
   "name": "Hexagonal Architecture for .Net Applications",
   "identity": "Otc.ProjectModel",
   "shortName": "hexagonal",
+  "v"
   "tags": {
     "language": "C#",
     "type": "project"
@@ -16,6 +17,14 @@
   "sourceName": "Otc.ProjectModel",
   "preferNameDirectory": true,
   "symbols": {
+    //EmailAdapter
+    "EmailAdapter": {
+      "type": "parameter",
+      "datatype": "bool",
+      "isRequired": false,
+      "defaultValue": "true",
+      "description": "Insert Email Adapter in the project"
+    },
     "user-choice": {
       "type": "parameter",
       "datatype": "choice",
@@ -101,10 +110,14 @@
         {
           "condition": "(Basic)",
           "exclude": [
-            "Otc.ProjectModel.Infra.EmailAdapter/**/*.cs",
-            "Otc.ProjectModel.Infra.NotificationAdapter/**/*.cs",
-            "Otc.ProjectModel.Infra.Repository/**/*.cs"
+            "Otc.ProjectModel.Infra.EmailAdapter/**/*",
+            "Otc.ProjectModel.Infra.NotificationAdapter/**/*",
+            "Otc.ProjectModel.Infra.Repository/**/*"
           ]
+        },
+        {
+          "condition": "(!EmailAdapter)",
+          "exclude": [ "Otc.ProjectModel.Infra.EmailAdapter/**/*" ]
         }
       ]
     }

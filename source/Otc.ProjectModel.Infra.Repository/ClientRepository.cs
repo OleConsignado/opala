@@ -31,6 +31,7 @@ namespace Otc.ProjectModel.Infra.Repository
             clientParams.Add("Email", client.Email);
             clientParams.Add("PhoneNumber", client.PhoneNumber);
             clientParams.Add("IsActive", client.IsActive, DbType.Boolean);
+            clientParams.Add("IsExcluded", false, DbType.Boolean);
             clientParams.Add("Street", client.Address.Street);
             clientParams.Add("Number", client.Address.Number);
             clientParams.Add("Neighborhood", client.Address.Neighborhood);
@@ -39,8 +40,8 @@ namespace Otc.ProjectModel.Infra.Repository
             clientParams.Add("Country", client.Address.Country);
             clientParams.Add("ZipCode", client.Address.ZipCode);
 
-            var queryClient = @"INSERT INTO Client (Id, Name, Email, PhoneNumber, Street, Number, Neighborhood, City, State, Country, ZipCode, IsActive) 
-                                VALUES (@Id, @Name, @Email, @PhoneNumber, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode, @IsActive)";
+            var queryClient = @"INSERT INTO Client (Id, Name, Email, PhoneNumber, IsExcluded, Street, Number, Neighborhood, City, State, Country, ZipCode, IsActive) 
+                                VALUES (@Id, @Name, @Email, @PhoneNumber, @IsExcluded, @Street, @Number, @Neighborhood, @City, @State, @Country, @ZipCode, @IsActive)";
 
             await dbConnection.ExecuteAsync(queryClient, clientParams);
         }
@@ -50,7 +51,7 @@ namespace Otc.ProjectModel.Infra.Repository
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId);
 
-            var query = @"select Id, Name, Email, PhoneNumber, IsActive, Street, Number, Neighborhood, City, State, Country, ZipCode from Client Where Id = @Id and IsActive = 1";
+            var query = @"select Id, Name, Email, PhoneNumber, IsActive, Street, Number, Neighborhood, City, State, Country, ZipCode from Client Where Id = @Id and IsActive = 1 and IsExcluded = 0";
 
             var client = await dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
                 cli.Address = add;
@@ -68,7 +69,7 @@ namespace Otc.ProjectModel.Infra.Repository
             var query = @"select c.Id, c.Name, c.Email, c.PhoneNumber, c.IsActive, 
                                 c.Street, c.Number, c.Neighborhood, c.City, c.State, c.Country, c.ZipCode,
                                 s.ClientId, s.Id, s.CreatedDate, s.LastUpdatedDate, s.ExpireDate, s.Active, s.Name 
-                                from Client c left join Subscription s on c.Id = s.ClientId Where c.Id = @Id and IsActive = 1";
+                                from Client c left join Subscription s on c.Id = s.ClientId Where c.Id = @Id and IsActive = 1 and isExcluded = 0";
 
             var subscriptions = new Dictionary<Guid, Client>();
 
@@ -83,7 +84,8 @@ namespace Otc.ProjectModel.Infra.Repository
                     subscriptions.Add(clientEntry.Id, clientEntry);
                 }
 
-                clientEntry.Subscriptions.Add(subs);
+                if (subs != null)
+                    clientEntry.Subscriptions.Add(subs);
 
                 return clientEntry;
             }, clientParams, splitOn: "Id,Street,ClientId");
@@ -117,7 +119,7 @@ namespace Otc.ProjectModel.Infra.Repository
             clientParams.Add("Country", client.Address.Country);
             clientParams.Add("ZipCode", client.Address.ZipCode);
 
-            var queryClient = @"UPDATE Client SET Name = @Name, Email = @Email, PhoneNumber = @PhoneNumber, Street = @Street, Number = @Number, Neighborhood = @Neighborhood, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE Id = @Id and IsActive = 1";
+            var queryClient = @"UPDATE Client SET Name = @Name, Email = @Email, PhoneNumber = @PhoneNumber, Street = @Street, Number = @Number, Neighborhood = @Neighborhood, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE Id = @Id and IsActive = 1 and isExcluded = 0";
 
             await dbConnection.ExecuteAsync(queryClient, clientParams);
         }
@@ -127,11 +129,11 @@ namespace Otc.ProjectModel.Infra.Repository
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId);
 
-            var query = @"select count(Id) from Client Where Id = @Id";
+            var query = @"select count(Id) from Client Where Id = @Id and isExcluded = 0";
 
-            var result = await dbConnection.ExecuteScalarAsync<int>(query, clientParams);
+            var result = await dbConnection.ExecuteScalarAsync(query, clientParams);
 
-            return result > 0;
+            return Convert.ToUInt16(result) > 0;
         }
 
         public async Task RemoveClientAsync(Guid clientId)

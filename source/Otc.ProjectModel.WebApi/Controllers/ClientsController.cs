@@ -17,11 +17,13 @@ namespace Otc.ProjectModel.WebApi.Controllers
     {
         private readonly IClientService clientService;
         private readonly ISubscriptionService subscriptionService;
+        private readonly IPaymentService paymentService;
 
-        public ClientsController(IClientService clientService, ISubscriptionService subscriptionService)
+        public ClientsController(IClientService clientService, ISubscriptionService subscriptionService, IPaymentService paymentService)
         {
             this.clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
             this.subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
+            this.paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
         }
 
         /// <summary>
@@ -160,5 +162,59 @@ namespace Otc.ProjectModel.WebApi.Controllers
                 return NotFound(ClientCoreError.ClientNotFound);
             }
         }
+
+        /// <summary>
+        /// Inclui um Pagamento do PayPal para a Assinatura
+        /// </summary>
+        /// <param name="addPayPalPaymentPost">Objeto de pagamento</param>
+        /// <returns></returns>
+        [HttpPost("{clientId}/subscriptions/{subscriptionId}/payments/paypal")]
+        public async Task<IActionResult> AddPayPalPayment([FromBody] AddPayPalPaymentPost addPayPalPaymentPost)
+        {
+            var payment = Mapper.Map<PayPalPayment>(addPayPalPaymentPost);
+
+            try
+            {
+                await paymentService.AddPayPalPaymentAsync(payment);
+
+                return Ok(payment);
+            }
+            catch (ClientCoreException ex) when (ex.Errors.Any(c => c.Key == ClientCoreError.ClientNotFound.Key))
+            {
+                return NotFound(ClientCoreError.ClientNotFound);
+            }
+            catch (SubscriptionCoreException ex) when (ex.Errors.Any(c => c.Key == SubscriptionCoreError.SubscriptionNotFound.Key))
+            {
+                return NotFound(SubscriptionCoreError.SubscriptionNotFound);
+            }
+        }
+
+        /// <summary>
+        /// Inclui um Pagamento do tipo Cartão de Crédito para a Assinatura
+        /// </summary>
+        /// <param name="addCreditCardPaymentPost"></param>
+        /// <returns></returns>
+        [HttpPost("{clientId}/subscriptions/{subscriptionId}/payments/creditcard")]
+        public async Task<IActionResult> AddCrediCardPayment([FromBody] AddCreditCardPaymentPost addCreditCardPaymentPost)
+        {
+            var payment = Mapper.Map<CreditCardPayment>(addCreditCardPaymentPost);
+
+            try
+            {
+                await paymentService.AddCreditCardPaymentAsync(payment);
+
+                return Ok(payment);
+            }
+            catch (ClientCoreException ex) when (ex.Errors.Any(c => c.Key == ClientCoreError.ClientNotFound.Key))
+            {
+                return NotFound(ClientCoreError.ClientNotFound);
+            }
+            catch (SubscriptionCoreException ex) when (ex.Errors.Any(c => c.Key == SubscriptionCoreError.SubscriptionNotFound.Key))
+            {
+                return NotFound(SubscriptionCoreError.SubscriptionNotFound);
+            }
+
+        }
+
     }
 }

@@ -73,9 +73,9 @@ namespace Otc.ProjectModel.WebApi
             services.AddProjectModelCoreApplication(c => c.Configure(Configuration.SafeGet<ApplicationConfiguration>()));
 
             services.AddProjectModelRepository(c => c.Configure(Configuration.SafeGet<ProjectModelRepositoryConfiguration>()));
-
+#if (EmailAdapter)
             services.AddEmailAdapter(c => c.Configure(Configuration.SafeGet<EmailAdapterConfiguration>()));
-
+#endif
             services.AddNotificationAdapter(c => c.Configure(Configuration.SafeGet<NotificationAdapterConfiguration>()));
 
             services.AddRequestTracking(requestTracker =>

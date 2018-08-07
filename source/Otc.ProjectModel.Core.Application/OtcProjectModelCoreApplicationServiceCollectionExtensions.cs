@@ -16,6 +16,7 @@ namespace Otc.ProjectModel.Core.Application
 
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             var applicationConfigurationLambda = new ApplicationConfigurationLambda(services);
             configurationLambda.Invoke(applicationConfigurationLambda);
