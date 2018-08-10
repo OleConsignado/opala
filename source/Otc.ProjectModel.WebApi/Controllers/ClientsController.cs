@@ -216,5 +216,30 @@ namespace Otc.ProjectModel.WebApi.Controllers
 
         }
 
+        /// <summary>
+        /// Retorna um Pagamento
+        /// </summary>
+        /// <param name="paymentId">Identificador do Pagamento</param>
+        /// <param name="paymentType">Tipo de Pagamento (paypal or creditcard)</param>
+        /// <returns></returns>
+        [HttpGet("{clientId}/subscriptions/{subscriptionId}/payments/{paymentId}/")]
+        public async Task<IActionResult> GetPayment(Guid paymentId, [FromQuery] string paymentType)
+        {
+            if (paymentType == null)
+                throw new ArgumentNullException(nameof(paymentType));
+
+            Payment payment;
+
+            if (paymentType.Equals("paypal"))
+            {
+                payment = await paymentService.GetPayPalPaymentAsync(paymentId) as PayPalPayment;
+            }
+            else
+            {
+                payment = await paymentService.GetCreditCardPaymentAsync(paymentId) as CreditCardPayment;
+            }
+
+            return Ok(payment);
+        }
     }
 }

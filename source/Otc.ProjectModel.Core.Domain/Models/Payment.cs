@@ -13,9 +13,9 @@ namespace Otc.ProjectModel.Core.Domain.Models
         [Required(ErrorKey = "400.002")]
         public Guid SubscriptionId { get; set; }
 
-        public DateTime PaidDate { get; set; }
+        public DateTimeOffset PaidDate { get; set; }
 
-        public DateTime ExpireDate { get; set; }
+        public DateTimeOffset ExpireDate { get; set; }
 
         [Required(ErrorKey = "400.003")]
         public decimal Total { get; set; }
