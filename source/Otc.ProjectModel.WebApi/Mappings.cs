@@ -18,6 +18,8 @@ namespace Otc.ProjectModel.WebApi
                 c.CreateMap<AddClientPost, Client>();
                 c.CreateMap<AddClientPost.AddressPost, Address>();
                 c.CreateMap<AddClientSubscriptionPost, Subscription>();
+                c.CreateMap<AddPayPalPaymentPost, PayPalPayment>();
+                c.CreateMap<AddCreditCardPaymentPost, CreditCardPayment>();
 
                 //Put
                 c.CreateMap<UpdateClientPut, Client>();

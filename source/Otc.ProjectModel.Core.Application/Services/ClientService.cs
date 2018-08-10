@@ -1,4 +1,5 @@
-﻿using Otc.ProjectModel.Core.Domain.Adapters;
+﻿using Microsoft.Extensions.Logging;
+using Otc.ProjectModel.Core.Domain.Adapters;
 using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Repositories;
@@ -15,21 +16,24 @@ namespace Otc.ProjectModel.Core.Application.Services
         private readonly IClientReadOnlyRepository clientReadOnlyRepository;
         private readonly IClientWriteOnlyRepository clientWriteOnlyRepository;
         private readonly ISubscriptionService subscriptionService;
-
+        private readonly ILogger logger;
         private readonly ApplicationConfiguration applicationConfiguration;
 
-        public ClientService(IEmailAdapter emailAdapter, IClientReadOnlyRepository clientReadOnlyRepository, IClientWriteOnlyRepository clientWriteOnlyRepository, ApplicationConfiguration applicationConfiguration, ISubscriptionService subscriptionService)
+        public ClientService(IEmailAdapter emailAdapter, IClientReadOnlyRepository clientReadOnlyRepository, IClientWriteOnlyRepository clientWriteOnlyRepository, ApplicationConfiguration applicationConfiguration, ISubscriptionService subscriptionService, ILoggerFactory loggerFactory)
         {
             this.emailAdapter = emailAdapter ?? throw new ArgumentNullException(nameof(emailAdapter));
             this.clientReadOnlyRepository = clientReadOnlyRepository ?? throw new ArgumentNullException(nameof(clientReadOnlyRepository));
             this.clientWriteOnlyRepository = clientWriteOnlyRepository ?? throw new ArgumentNullException(nameof(clientWriteOnlyRepository));
             this.applicationConfiguration = applicationConfiguration ?? throw new ArgumentNullException(nameof(applicationConfiguration));
             this.subscriptionService = subscriptionService ?? throw new ArgumentNullException(nameof(subscriptionService));
+            this.logger = loggerFactory?.CreateLogger<ClientService>() ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        public async Task<bool> ClientExists(Guid clientId)
+        public async Task<bool> ClientExistsAsync(Guid clientId)
         {
-            return await clientReadOnlyRepository.ClientExistsAsync(clientId);
+            var result = await clientReadOnlyRepository.ClientExistsAsync(clientId);
+
+            return result;
         }
 
         public async Task AddClientAsync(Client client)
@@ -39,9 +43,12 @@ namespace Otc.ProjectModel.Core.Application.Services
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
+            logger.LogInformation("Iniciando gravação do Cliente...");
             await clientWriteOnlyRepository.AddClientAsync(client);
+            logger.LogInformation("Cliente gravado.");
 
             //Todo Disable for integration tests
+            //logger.LogInformation("Enviando email para o Cliente");
             //await emailAdapter.SendAsync(client.Email, applicationConfiguration.EmailFrom, "Cadastro realizado com sucesso", "Seu cadastro foi realizado com sucesso");
         }
 
@@ -54,7 +61,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task EnableDisableClientAsync(Guid clientId, bool isActive)
         {
-            if (!await ClientExists(clientId))
+            if (!await ClientExistsAsync(clientId))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.EnableDisableClientAsync(clientId, isActive);
@@ -67,7 +74,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(client);
 
-            if (!await ClientExists(client.Id))
+            if (!await ClientExistsAsync(client.Id))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.UpdateClientAsync(client);
@@ -75,7 +82,7 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task RemoveClientAsync(Guid clientId)
         {
-            if (!await ClientExists(clientId))
+            if (!await ClientExistsAsync(clientId))
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.RemoveClientAsync(clientId);

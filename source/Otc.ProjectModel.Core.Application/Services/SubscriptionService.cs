@@ -42,14 +42,14 @@ namespace Otc.ProjectModel.Core.Application.Services
 
             await subscriptionWriteOnlyRepository.AddSubscriptionAsync(subscription);
 
-            await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
+            //await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
         }
 
         public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)
         {
-            var client = await clientReadOnlyRepository.GetClientAsync(clientId);
+            var client = await clientReadOnlyRepository.ClientExistsAsync(clientId);
 
-            if (client == null)
+            if (!client)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             var subscriptions = await subscriptionReadOnlyRepository.GetClientSubscriptionsAsync(clientId);

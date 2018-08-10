@@ -6,11 +6,6 @@ namespace Otc.ProjectModel.Core.Domain.Models
 {
     public class Client
     {
-        public Client()
-        {
-
-        }
-
         public ICollection<Subscription> Subscriptions { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();

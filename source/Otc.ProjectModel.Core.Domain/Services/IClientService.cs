@@ -13,7 +13,7 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// </summary>
         /// <param name="clientId">Identificador do Cliente</param>
         /// <returns>True ou False</returns>
-        Task<bool> ClientExists(Guid clientId);
+        Task<bool> ClientExistsAsync(Guid clientId);
 
         /// <summary>
         /// Retorna um Cliente
