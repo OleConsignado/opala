@@ -57,6 +57,10 @@ namespace Otc.ProjectModel.Core.Test
         private void ClientReadOnlyRepositoryMock(Mock<IClientReadOnlyRepository> clientReadOnlyRepoMock)
         {
             clientReadOnlyRepoMock
+                .Setup(s => s.ClientExistsAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799")))
+                .ReturnsAsync(true);
+
+            clientReadOnlyRepoMock
                 .Setup(s => s.GetClientAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799")))
                 .ReturnsAsync(new Client
                 {
@@ -79,7 +83,7 @@ namespace Otc.ProjectModel.Core.Test
                 });
 
             clientReadOnlyRepoMock
-                .Setup(s => s.GetClientWithSubscriptionsAsync(Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68")))
+                .Setup(s => s.GetClientWithSubscriptionsAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799")))
                 .ReturnsAsync(new Client
                 {
                     Name = "Ze Tabajara",
@@ -340,7 +344,7 @@ namespace Otc.ProjectModel.Core.Test
         {
             var subscriptionService = serviceProvider.GetService<ISubscriptionService>();
 
-            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799"));
 
             Assert.True(subscriptions.Any());
         }
