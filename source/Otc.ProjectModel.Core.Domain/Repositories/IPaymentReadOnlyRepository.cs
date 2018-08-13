@@ -7,8 +7,8 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
 {
     public interface IPaymentReadOnlyRepository
     {
-        Task<Payment> GetPaymentAsync(Guid paymentId);
+        Task<Payment> GetPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId);
 
-        Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid subscriptionId);
+        Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid clientId, Guid subscriptionId);
     }
 }

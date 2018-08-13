@@ -24,25 +24,35 @@ namespace Otc.ProjectModel.Core.Application.Services
             this.paymentReadOnlyRepository = paymentReadOnlyRepository ?? throw new ArgumentNullException(nameof(paymentReadOnlyRepository));
         }
 
-        private async Task ValidateEntry(Payment payment)
+        private async Task ValidatePaymentEntry(Payment payment)
         {
             if (payment == null)
                 throw new System.ArgumentNullException(nameof(payment));
 
-            var client = await clientService.ClientExistsAsync(payment.ClientId);
+            await VerifyClientExists(payment.ClientId);
 
-            if (!client)
-                throw new ClientCoreException(ClientCoreError.ClientNotFound);
+            await VerifySubscriptionExists(payment.SubscriptionId);
+        }
 
-            var subscription = await subscriptionService.GetSubcriptionAsync(payment.SubscriptionId);
+        private async Task VerifySubscriptionExists(Guid subscriptionId)
+        {
+            var subscription = await subscriptionService.GetSubcriptionAsync(subscriptionId);
 
             if (subscription == null)
                 throw new SubscriptionCoreException(SubscriptionCoreError.SubscriptionNotFound);
         }
 
+        private async Task VerifyClientExists(Guid clientId)
+        {
+            var client = await clientService.ClientExistsAsync(clientId);
+
+            if (!client)
+                throw new ClientCoreException(ClientCoreError.ClientNotFound);
+        }
+
         public async Task AddCreditCardPaymentAsync(CreditCardPayment payment)
         {
-            await ValidateEntry(payment);
+            await ValidatePaymentEntry(payment);
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(payment);
 
@@ -51,35 +61,47 @@ namespace Otc.ProjectModel.Core.Application.Services
 
         public async Task AddPayPalPaymentAsync(PayPalPayment payment)
         {
-            await ValidateEntry(payment);
+            await ValidatePaymentEntry(payment);
 
             ValidationHelper.ThrowValidationExceptionIfNotValid(payment);
 
             await paymentWriteOnlyRepository.AddPayPalPaymentAsync(payment);
         }
 
-        public async Task<PayPalPayment> GetPayPalPaymentAsync(Guid paymentId)
+        public async Task<PayPalPayment> GetPayPalPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId)
         {
-            PayPalPayment payment = await paymentReadOnlyRepository.GetPaymentAsync(paymentId) as PayPalPayment;
+            await VerifyClientExists(clientId);
+
+            await VerifySubscriptionExists(subscriptionId);
+
+            PayPalPayment payment = await paymentReadOnlyRepository.GetPaymentAsync(clientId, subscriptionId, paymentId) as PayPalPayment;
+
+            if (payment == null)
+                throw new PaymentCoreException(PaymentCoreError.PaymentNotFound);
 
             return payment;
         }
 
-        public async Task<CreditCardPayment> GetCreditCardPaymentAsync(Guid paymentId)
+        public async Task<CreditCardPayment> GetCreditCardPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId)
         {
-            CreditCardPayment payment = await paymentReadOnlyRepository.GetPaymentAsync(paymentId) as CreditCardPayment;
+            await VerifyClientExists(clientId);
+
+            await VerifySubscriptionExists(subscriptionId);
+
+            CreditCardPayment payment = await paymentReadOnlyRepository.GetPaymentAsync(clientId, subscriptionId, paymentId) as CreditCardPayment;
+
+            if (payment == null)
+                throw new PaymentCoreException(PaymentCoreError.PaymentNotFound);
 
             return payment;
         }
 
-        public Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid subscriptionId)
+        public async Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid clientId, Guid subscriptionId)
         {
-            var subscriptionExist = subscriptionService.GetSubcriptionAsync(subscriptionId);
+            await VerifyClientExists(clientId);
+            await VerifySubscriptionExists(subscriptionId);
 
-            if (subscriptionExist == null)
-                throw new SubscriptionCoreException(SubscriptionCoreError.SubscriptionNotFound);
-
-            var payments = paymentReadOnlyRepository.GetPaymentsFromSubscriptionAsync(subscriptionId);
+            var payments = await paymentReadOnlyRepository.GetPaymentsFromSubscriptionAsync(clientId, subscriptionId);
 
             return payments;
         }

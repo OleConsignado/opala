@@ -65,12 +65,18 @@ namespace Otc.ProjectModel.Infra.Repository
             await dbConnection.ExecuteAsync(queryClient, paymentParams);
         }
 
-        public async Task<Payment> GetPaymentAsync(Guid paymentId)
+        public async Task<Payment> GetPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId)
         {
             var paymentParams = new DynamicParameters();
             paymentParams.Add("Id", paymentId);
+            paymentParams.Add("ClientId", clientId);
+            paymentParams.Add("SubscriptionId", subscriptionId);
 
-            var query = @"select Id, SubscriptionId, PaidDate, ExpireDate, Total, TotalPaid, Payer, CardHolderName, CardNumber, LastTransactionNumber, TransactionCode, Discriminator from Payment Where Id = @Id";
+            var query = @"select p.Id, p.SubscriptionId, p.PaidDate, p.ExpireDate, p.Total, p.TotalPaid, p.Payer, p.CardHolderName, p.CardNumber, 
+                        p.LastTransactionNumber, p.TransactionCode, p.Discriminator from Payment p 
+                        inner join Subscription s on p.SubscriptionId = s.Id 
+                        inner join Client c on s.ClientId = c.Id 
+                        Where c.Id = @ClientId and s.Id = @SubscriptionId and p.Id = @Id";
 
             var reader = await dbConnection.ExecuteReaderAsync(query, paymentParams);
 
@@ -82,11 +88,15 @@ namespace Otc.ProjectModel.Infra.Repository
                     {
                         var paypalPayment = GetPayPalPayment(reader);
 
+                        paypalPayment.ClientId = clientId;
+
                         return paypalPayment;
                     }
                     else if (reader.GetValue(11).ToString().Equals("CreditCardPayment"))
                     {
                         var creditCardPayment = GetCreditCardPayment(reader);
+
+                        creditCardPayment.ClientId = clientId;
 
                         return creditCardPayment;
                     }
@@ -96,14 +106,17 @@ namespace Otc.ProjectModel.Infra.Repository
             return null;
         }
 
-        public async Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid subscriptionId)
+        public async Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid clientId, Guid subscriptionId)
         {
-            ICollection<Payment> payments = new List<Payment>();
+            ICollection<Payment> payments;
 
             var paymentParams = new DynamicParameters();
             paymentParams.Add("Id", subscriptionId);
+            paymentParams.Add("ClientId", clientId);
 
-            var query = @"select Id, SubscriptionId, PaidDate, ExpireDate, Total, TotalPaid, Payer, CardHolderName, CardNumber, LastTransactionNumber, TransactionCode, Discriminator from Payment Where SubscriptionId = @Id";
+            var query = @"select p.Id, p.SubscriptionId, p.PaidDate, p.ExpireDate, p.Total, p.TotalPaid, p.Payer, p.CardHolderName, p.CardNumber, p.LastTransactionNumber, p.TransactionCode, p.Discriminator 
+                        from Payment p inner join Subscription s on p.SubscriptionId = s.Id 
+                        Where s.ClientId = @ClientId and s.Id = @Id";
 
             var reader = await dbConnection.ExecuteReaderAsync(query, paymentParams);
 
@@ -116,19 +129,23 @@ namespace Otc.ProjectModel.Infra.Repository
                     if (reader.GetValue(11).ToString().Equals("PayPalPayment"))
                     {
                         var paypalPayment = GetPayPalPayment(reader);
+                        paypalPayment.ClientId = clientId;
 
                         payments.Add(paypalPayment);
                     }
                     else if (reader.GetValue(11).ToString().Equals("CreditCardPayment"))
                     {
                         var creditCardPayment = GetCreditCardPayment(reader);
+                        creditCardPayment.ClientId = clientId;
 
                         payments.Add(creditCardPayment);
                     }
                 }
+
+                return payments;
             }
 
-            return payments;
+            return null;
         }
 
         #region private

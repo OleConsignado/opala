@@ -69,7 +69,7 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns></returns>
         [HttpPatch("{clientId}/status")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(AddClientPost), 200)]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> EnableDisableClientAsync(Guid clientId, [FromQuery] bool isActive)
         {
             await clientService.EnableDisableClientAsync(clientId, isActive);
@@ -109,6 +109,8 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <param name="clientId">Identificador</param>
         /// <returns></returns>
         [HttpDelete("clientId")]
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> RemoveClientAsync(Guid clientId)
         {
             await clientService.RemoveClientAsync(clientId);
@@ -169,6 +171,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <param name="addPayPalPaymentPost">Objeto de pagamento</param>
         /// <returns></returns>
         [HttpPost("{clientId}/subscriptions/{subscriptionId}/payments/paypal")]
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
+        [ProducesResponseType(typeof(AddPayPalPaymentPost), 200)]
         public async Task<IActionResult> AddPayPalPayment([FromBody] AddPayPalPaymentPost addPayPalPaymentPost)
         {
             var payment = Mapper.Map<PayPalPayment>(addPayPalPaymentPost);
@@ -195,6 +200,9 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <param name="addCreditCardPaymentPost"></param>
         /// <returns></returns>
         [HttpPost("{clientId}/subscriptions/{subscriptionId}/payments/creditcard")]
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
+        [ProducesResponseType(typeof(AddCreditCardPaymentPost), 200)]
         public async Task<IActionResult> AddCrediCardPayment([FromBody] AddCreditCardPaymentPost addCreditCardPaymentPost)
         {
             var payment = Mapper.Map<CreditCardPayment>(addCreditCardPaymentPost);
@@ -219,27 +227,55 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <summary>
         /// Retorna um Pagamento
         /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="subscriptionId">Identificador da Assinatura</param>
         /// <param name="paymentId">Identificador do Pagamento</param>
-        /// <param name="paymentType">Tipo de Pagamento (paypal or creditcard)</param>
+        /// <param name="paymentType">Tipo de Pagamento (1 - paypal | 2 - creditcard)</param>
         /// <returns></returns>
         [HttpGet("{clientId}/subscriptions/{subscriptionId}/payments/{paymentId}/")]
-        public async Task<IActionResult> GetPayment(Guid paymentId, [FromQuery] string paymentType)
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
+        [ProducesResponseType(typeof(Payment), 200)]
+        public async Task<IActionResult> GetPayment(Guid clientId, Guid subscriptionId, Guid paymentId, [FromQuery] PaymentType paymentType)
         {
-            if (paymentType == null)
-                throw new ArgumentNullException(nameof(paymentType));
-
             Payment payment;
 
-            if (paymentType.Equals("paypal"))
+            switch (paymentType)
             {
-                payment = await paymentService.GetPayPalPaymentAsync(paymentId) as PayPalPayment;
-            }
-            else
-            {
-                payment = await paymentService.GetCreditCardPaymentAsync(paymentId) as CreditCardPayment;
+                case PaymentType.PayPal:
+                    payment = await paymentService.GetPayPalPaymentAsync(clientId, subscriptionId, paymentId) as PayPalPayment;
+                    break;
+                case PaymentType.CreditCard:
+                    payment = await paymentService.GetCreditCardPaymentAsync(clientId, subscriptionId, paymentId) as CreditCardPayment;
+                    break;
+                default:
+                    payment = null;
+                    break;
             }
 
             return Ok(payment);
         }
+
+        /// <summary>
+        /// Retorna ums lista Pagamentos
+        /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="subscriptionId">Identificador da Assinatura</param>
+        /// <returns></returns>
+        [HttpGet("{clientId}/subscriptions/{subscriptionId}/payments/")]
+        [ProducesResponseType(typeof(ClientCoreException), 400)]
+        [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
+        [ProducesResponseType(typeof(IEnumerable<Payment>), 200)]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
+        public async Task<IActionResult> GetPayments(Guid clientId, Guid subscriptionId)
+        {
+             var payments = await paymentService.GetPaymentsFromSubscriptionAsync(clientId, subscriptionId);
+
+            if (!payments.Any())
+                return NoContent();
+
+            return Ok(payments);
+        }
+
     }
 }

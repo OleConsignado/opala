@@ -30,22 +30,31 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// <summary>
         /// Retorna um Pagamento do tipo PayPal
         /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="subscriptionId">Identificador da Assinatura</param>
         /// <param name="paymentId">Identificador do Pagamento</param>
+        /// <exception cref="Exceptions.ClientCoreException">Quando o cliente não for encontrado.</exception>
+        /// <exception cref="Exceptions.SubscriptionCoreException">Quando a assinatura não for encontrada.</exception>
         /// <returns></returns>
-        Task<PayPalPayment> GetPayPalPaymentAsync(Guid paymentId);
+        Task<PayPalPayment> GetPayPalPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId);
 
         /// <summary>
         /// Retorna um Pagamento do tipo Credit Card
         /// </summary>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="subscriptionId">Identificador da Assinatura</param>
         /// <param name="paymentId">Identificador do Pagamento</param>
+        /// <exception cref="Exceptions.ClientCoreException">Quando o cliente não for encontrado.</exception>
+        /// <exception cref="Exceptions.SubscriptionCoreException">Quando a assinatura não for encontrada.</exception>
         /// <returns></returns>
-        Task<CreditCardPayment> GetCreditCardPaymentAsync(Guid paymentId);
+        Task<CreditCardPayment> GetCreditCardPaymentAsync(Guid clientId, Guid subscriptionId, Guid paymentId);
 
         /// <summary>
         /// Lista os Pagamentos de uma Assinatura
         /// </summary>
-        /// <param name="subscriptionId"></param>
+        /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="subscriptionId">Identificador da Assinatura</param>
         /// <returns></returns>
-        Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid subscriptionId);
+        Task<IEnumerable<Payment>> GetPaymentsFromSubscriptionAsync(Guid clientId, Guid subscriptionId);
     }
 }
