@@ -238,7 +238,7 @@ namespace Otc.ProjectModel.Core.Test
             };
 
             subscriptionReadOnlyRepoMock
-                .Setup(s => s.GetClientSubscriptionsAsync(clientId))
+                .Setup(s => s.GetClientSubscriptionsAsync(clientId, 1, 10))
                 .ReturnsAsync(subscriptions);
         }
         #endregion
@@ -344,7 +344,7 @@ namespace Otc.ProjectModel.Core.Test
         {
             var subscriptionService = serviceProvider.GetService<ISubscriptionService>();
 
-            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799"));
+            var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799"), 1, 10);
 
             Assert.True(subscriptions.Any());
         }

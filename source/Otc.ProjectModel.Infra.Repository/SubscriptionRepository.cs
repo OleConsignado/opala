@@ -49,14 +49,16 @@ namespace Otc.ProjectModel.Infra.Repository
             return subscription.SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)
+        public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId, int page, int count)
         {
-            // Atentar para a quantidade de registros retornadas
-            // O ideal é paginar sua requisição ou filtrar o máximo possivel
             var subscriptionParams = new DynamicParameters();
             subscriptionParams.Add("ClientId", clientId, DbType.Guid);
+            subscriptionParams.Add("PageNumber", page);
+            subscriptionParams.Add("RowsPerPage", count);
 
-            var query = @"Select top 100 Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription Where ClientId = @ClientId";
+            var query = @"Select Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From 
+                            (Select ROW_NUMBER() OVER(ORDER BY CreatedDate) AS RowNumber, Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription Where ClientId = @ClientId) As S
+                          Where RowNumber BETWEEN ((@PageNumber - 1) * @RowsPerPage + 1) AND (@PageNumber * @RowsPerPage)";
 
             var subscriptions = await dbConnection.QueryAsync<Subscription>(query, subscriptionParams);
 

@@ -8,6 +8,7 @@ using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.WebApi.Dtos;
+using Otc.Validations.Helpers;
 
 namespace Otc.ProjectModel.WebApi.Controllers
 {
@@ -147,15 +148,22 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// Listas as Assinaturas de um Cliente
         /// </summary>
         /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="pageOptions">Parâmetros de pesquisa</param>
         /// <returns>Client</returns>
         [HttpGet("{clientId}/subscriptions")]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
-        public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId)
+        [ProducesResponseType(typeof(NoContentResult), 204)]
+        public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId, [FromQuery] PageOptions pageOptions)
         {
+            ValidationHelper.ThrowValidationExceptionIfNotValid(pageOptions);
+
             try
             {
-                var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+                var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId, pageOptions.Page.Value, pageOptions.Count.Value);
+
+                if (!subscriptions.Any())
+                    return NoContent();
 
                 return Ok(subscriptions);
             }

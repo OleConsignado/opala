@@ -28,7 +28,9 @@ namespace Otc.ProjectModel.Core.Domain.Services
         /// Lista todas as Assinaturas de um Cliente
         /// </summary>
         /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="page">Página</param>
+        /// <param name="count">Quantidade de registros por página</param>
         /// <returns></returns>
-        Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId);
+        Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId, int page, int count);
     }
 }

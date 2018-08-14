@@ -45,14 +45,14 @@ namespace Otc.ProjectModel.Core.Application.Services
             //await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
         }
 
-        public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId)
+        public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId, int page, int count)
         {
             var client = await clientReadOnlyRepository.ClientExistsAsync(clientId);
 
             if (!client)
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
-            var subscriptions = await subscriptionReadOnlyRepository.GetClientSubscriptionsAsync(clientId);
+            var subscriptions = await subscriptionReadOnlyRepository.GetClientSubscriptionsAsync(clientId, page, count);
 
             return subscriptions;
         }
