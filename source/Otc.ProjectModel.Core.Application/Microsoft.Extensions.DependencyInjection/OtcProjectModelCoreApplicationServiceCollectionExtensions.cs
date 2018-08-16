@@ -1,25 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Otc.ProjectModel.Core.Application;
 using Otc.ProjectModel.Core.Application.Services;
 using Otc.ProjectModel.Core.Domain.Services;
 using System;
 
-namespace Otc.ProjectModel.Core.Application
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class OtcProjectModelCoreApplicationServiceCollectionExtensions
     {
-        public static IServiceCollection AddProjectModelCoreApplication(this IServiceCollection services, Action<ApplicationConfigurationLambda> configurationLambda)
+        public static IServiceCollection AddProjectModelCoreApplication(this IServiceCollection services, ApplicationConfiguration applicationConfiguration)
         {
             if (services == null)
-            {
                 throw new ArgumentNullException(nameof(services));
-            }
 
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IPaymentService, PaymentService>();
-
-            var applicationConfigurationLambda = new ApplicationConfigurationLambda(services);
-            configurationLambda.Invoke(applicationConfigurationLambda);
+            services.AddSingleton(applicationConfiguration);
 
             return services;
         }

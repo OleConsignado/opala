@@ -70,13 +70,13 @@ namespace Otc.ProjectModel.WebApi
                 c.IncludeXmlComments(GetXmlCommentsPath());
             });
 
-            services.AddProjectModelCoreApplication(c => c.Configure(Configuration.SafeGet<ApplicationConfiguration>()));
+            services.AddProjectModelCoreApplication(Configuration.SafeGet<ApplicationConfiguration>());
 
-            services.AddProjectModelRepository(c => c.Configure(Configuration.SafeGet<ProjectModelRepositoryConfiguration>()));
+            services.AddProjectModelRepository(Configuration.SafeGet<RepositoryConfiguration>());
 #if (EmailAdapter)
-            services.AddEmailAdapter(c => c.Configure(Configuration.SafeGet<EmailAdapterConfiguration>()));
+            services.AddEmailAdapter(Configuration.SafeGet<EmailAdapterConfiguration>());
 #endif
-            services.AddNotificationAdapter(c => c.Configure(Configuration.SafeGet<NotificationAdapterConfiguration>()));
+            services.AddNotificationAdapter(Configuration.SafeGet<NotificationAdapterConfiguration>());
 
             services.AddRequestTracking(requestTracker =>
             {

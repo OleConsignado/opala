@@ -8,6 +8,7 @@ using Otc.ProjectModel.Core.Domain.Exceptions;
 using Otc.ProjectModel.Core.Domain.Models;
 using Otc.ProjectModel.Core.Domain.Services;
 using Otc.ProjectModel.WebApi.Dtos;
+using Otc.Validations.Helpers;
 
 namespace Otc.ProjectModel.WebApi.Controllers
 {
@@ -69,7 +70,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns></returns>
         [HttpPatch("{clientId}/status")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> EnableDisableClientAsync(Guid clientId, [FromQuery] bool isActive)
         {
             await clientService.EnableDisableClientAsync(clientId, isActive);
@@ -110,7 +110,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns></returns>
         [HttpDelete("clientId")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> RemoveClientAsync(Guid clientId)
         {
             await clientService.RemoveClientAsync(clientId);
@@ -147,15 +146,18 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// Listas as Assinaturas de um Cliente
         /// </summary>
         /// <param name="clientId">Identificador do Cliente</param>
+        /// <param name="pageOptions">Parâmetros de pesquisa</param>
         /// <returns>Client</returns>
         [HttpGet("{clientId}/subscriptions")]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
-        public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId)
+        public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId, [FromQuery] PageOptions pageOptions)
         {
+            ValidationHelper.ThrowValidationExceptionIfNotValid(pageOptions);
+
             try
             {
-                var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId);
+                var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId, pageOptions.Page.Value, pageOptions.Count.Value);
 
                 return Ok(subscriptions);
             }
@@ -266,16 +268,11 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [ProducesResponseType(typeof(ClientCoreException), 400)]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(IEnumerable<Payment>), 200)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> GetPayments(Guid clientId, Guid subscriptionId)
         {
              var payments = await paymentService.GetPaymentsFromSubscriptionAsync(clientId, subscriptionId);
 
-            if (!payments.Any())
-                return NoContent();
-
             return Ok(payments);
         }
-
     }
 }

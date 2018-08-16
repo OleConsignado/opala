@@ -9,6 +9,6 @@ namespace Otc.ProjectModel.Core.Domain.Repositories
     {
         Task<Subscription> GetSubscriptionAsync(Guid id);
 
-        Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId);
+        Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId, int page, int count);
     }
 }
