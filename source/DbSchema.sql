@@ -1,6 +1,6 @@
 ﻿USE [OtcProjectModelDb]
 GO
-/****** Object:  Table [dbo].[Client]    Script Date: 07/08/2018 14:26:06 ******/
+/****** Object:  Table [dbo].[Client]    Script Date: 16/08/2018 17:08:28 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31,7 +31,7 @@ PRIMARY KEY CLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Table [dbo].[Payment]    Script Date: 07/08/2018 14:26:06 ******/
+/****** Object:  Table [dbo].[Payment]    Script Date: 16/08/2018 17:08:28 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -60,7 +60,7 @@ PRIMARY KEY CLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Table [dbo].[Subscription]    Script Date: 07/08/2018 14:26:06 ******/
+/****** Object:  Table [dbo].[Subscription]    Script Date: 16/08/2018 17:08:28 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

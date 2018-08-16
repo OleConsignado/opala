@@ -2,7 +2,7 @@
 
 namespace Otc.ProjectModel.Infra.Repository
 {
-    public class ProjectModelRepositoryConfiguration
+    public class RepositoryConfiguration
     {
         [Required]
         public string SqlConnectionString { get; set; }

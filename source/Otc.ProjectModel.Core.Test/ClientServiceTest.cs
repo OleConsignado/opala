@@ -48,7 +48,7 @@ namespace Otc.ProjectModel.Core.Test
             services.AddTransient(t => subscriptionReadOnlyRepoMock.Object);
             services.AddTransient(t => subscriptionWriteOnlyRepoMock.Object);
 
-            services.AddProjectModelCoreApplication(c => c.Configure(new ApplicationConfiguration { EmailFrom = "meu.teste@teste.com" }));
+            services.AddProjectModelCoreApplication(new ApplicationConfiguration { EmailFrom = "meu.teste@teste.com" });
 
             serviceProvider = services.BuildServiceProvider();
         }

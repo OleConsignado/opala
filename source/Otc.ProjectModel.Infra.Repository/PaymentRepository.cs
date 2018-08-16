@@ -151,34 +151,36 @@ namespace Otc.ProjectModel.Infra.Repository
         #region private
         PayPalPayment GetPayPalPayment(IDataReader reader)
         {
-            var paypalPayment = new PayPalPayment();
-
-            paypalPayment.Id = reader.GetGuid(0);
-            paypalPayment.SubscriptionId = reader.GetGuid(1);
-            paypalPayment.PaidDate = DateTimeOffset.Parse(reader.GetValue(2).ToString());
-            paypalPayment.ExpireDate = DateTimeOffset.Parse(reader.GetValue(3).ToString());
-            paypalPayment.Total = reader.GetDecimal(4);
-            paypalPayment.TotalPaid = reader.GetDecimal(5);
-            paypalPayment.Payer = reader.GetString(6);
-            paypalPayment.TransactionCode = reader.GetString(10);
+            var paypalPayment = new PayPalPayment
+            {
+                Id = reader.GetGuid(0),
+                SubscriptionId = reader.GetGuid(1),
+                PaidDate = DateTimeOffset.Parse(reader.GetValue(2).ToString()),
+                ExpireDate = DateTimeOffset.Parse(reader.GetValue(3).ToString()),
+                Total = reader.GetDecimal(4),
+                TotalPaid = reader.GetDecimal(5),
+                Payer = reader.GetString(6),
+                TransactionCode = reader.GetString(10)
+            };
 
             return paypalPayment;
         }
 
         CreditCardPayment GetCreditCardPayment(IDataReader reader)
         {
-            var creditCardPayment = new CreditCardPayment();
-
-            creditCardPayment.Id = reader.GetGuid(0);
-            creditCardPayment.SubscriptionId = reader.GetGuid(1);
-            creditCardPayment.PaidDate = DateTimeOffset.Parse(reader.GetValue(2).ToString());
-            creditCardPayment.ExpireDate = DateTimeOffset.Parse(reader.GetValue(3).ToString());
-            creditCardPayment.Total = reader.GetDecimal(4);
-            creditCardPayment.TotalPaid = reader.GetDecimal(5);
-            creditCardPayment.Payer = reader.GetString(6);
-            creditCardPayment.CardHolderName = reader.GetString(7);
-            creditCardPayment.CardNumber = reader.GetString(8);
-            creditCardPayment.LastTransactionNumber = reader.GetString(9);
+            var creditCardPayment = new CreditCardPayment
+            {
+                Id = reader.GetGuid(0),
+                SubscriptionId = reader.GetGuid(1),
+                PaidDate = DateTimeOffset.Parse(reader.GetValue(2).ToString()),
+                ExpireDate = DateTimeOffset.Parse(reader.GetValue(3).ToString()),
+                Total = reader.GetDecimal(4),
+                TotalPaid = reader.GetDecimal(5),
+                Payer = reader.GetString(6),
+                CardHolderName = reader.GetString(7),
+                CardNumber = reader.GetString(8),
+                LastTransactionNumber = reader.GetString(9)
+            };
 
             return creditCardPayment;
         }

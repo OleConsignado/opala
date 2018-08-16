@@ -70,7 +70,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns></returns>
         [HttpPatch("{clientId}/status")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> EnableDisableClientAsync(Guid clientId, [FromQuery] bool isActive)
         {
             await clientService.EnableDisableClientAsync(clientId, isActive);
@@ -111,7 +110,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
         /// <returns></returns>
         [HttpDelete("clientId")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> RemoveClientAsync(Guid clientId)
         {
             await clientService.RemoveClientAsync(clientId);
@@ -153,7 +151,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [HttpGet("{clientId}/subscriptions")]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(IEnumerable<Subscription>), 200)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> GetClientSubscriptionsAsync(Guid clientId, [FromQuery] PageOptions pageOptions)
         {
             ValidationHelper.ThrowValidationExceptionIfNotValid(pageOptions);
@@ -161,9 +158,6 @@ namespace Otc.ProjectModel.WebApi.Controllers
             try
             {
                 var subscriptions = await subscriptionService.GetClientSubscriptionsAsync(clientId, pageOptions.Page.Value, pageOptions.Count.Value);
-
-                if (!subscriptions.Any())
-                    return NoContent();
 
                 return Ok(subscriptions);
             }
@@ -274,16 +268,11 @@ namespace Otc.ProjectModel.WebApi.Controllers
         [ProducesResponseType(typeof(ClientCoreException), 400)]
         [ProducesResponseType(typeof(SubscriptionCoreException), 400)]
         [ProducesResponseType(typeof(IEnumerable<Payment>), 200)]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
         public async Task<IActionResult> GetPayments(Guid clientId, Guid subscriptionId)
         {
              var payments = await paymentService.GetPaymentsFromSubscriptionAsync(clientId, subscriptionId);
 
-            if (!payments.Any())
-                return NoContent();
-
             return Ok(payments);
         }
-
     }
 }
