@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Otc.Validations.Helpers" Version="1.0.1" />
+    <PackageReference Include="Otc.Validations.Helpers" Version="1.0.0-v100-alpha1-build2" />
   </ItemGroup>
 
   <ItemGroup>
