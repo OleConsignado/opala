@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Otc.DomainBase.Exceptions;
 using Otc.ProjectModel.Core.Application;
 using Otc.ProjectModel.Core.Domain.Adapters;
 using Otc.ProjectModel.Core.Domain.Exceptions;
@@ -293,7 +294,7 @@ namespace Otc.ProjectModel.Core.Test
                 }
             };
 
-            await Assert.ThrowsAsync<Validations.Helpers.ValidationException>(() => clientService.AddClientAsync(client));
+            await Assert.ThrowsAsync<ModelValidationException>(() => clientService.AddClientAsync(client));
         }
 
         [Fact]

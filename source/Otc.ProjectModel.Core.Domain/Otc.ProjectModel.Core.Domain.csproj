@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Otc.ComponentModel.Annotations" Version="1.0.1" />
-    <PackageReference Include="Otc.DomainBase.Exceptions" Version="1.0.2" />
+    <PackageReference Include="Otc.DomainBase.Exceptions" Version="1.0.0-v100-alpha2-build5" />
   </ItemGroup>
 
 </Project>
