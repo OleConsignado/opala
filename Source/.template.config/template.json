@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Luciano Lima",
+  "classifications": [
+    "Common",
+    "Library",
+    "Web API"
+  ],
+  "name": "Hexagonal Architecture for .Net Applications",
+  "identity": "Opala",
+  "shortName": "hexagonal",
+  "v"
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Opala",
+  "preferNameDirectory": true,
+  "symbols": {
+    //EmailAdapter
+    "EmailAdapter": {
+      "type": "parameter",
+      "datatype": "bool",
+      "isRequired": false,
+      "defaultValue": "true",
+      "description": "Insert Email Adapter in the project"
+    },
+    "user-choice": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "full",
+      "choices": [
+        {
+          "choice": "full",
+          "description": "Full Solution with complete operations"
+        },
+        {
+          "choice": "basic",
+          "description": "Contains only Domain, Application, Test and WebApi projects"
+        }
+      ],
+      "replaces": "user-choice",
+      "onlyIf": [
+        {
+          "after": "\"user-choice\": \""
+        }
+      ]
+    },
+    "data-access": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "dapper",
+      "choices": [
+        {
+          "choice": "dapper",
+          "description": "Dapper"
+        },
+        {
+          "choice": "entityframework",
+          "description": "Entity Framework Core"
+        },
+        {
+          "choice": "none",
+          "description": "No frameworks"
+        }
+      ],
+      "replaces": "data-access",
+      "onlyIf": [
+        {
+          "after": "\"data-access\": \""
+        }
+      ]
+    },
+    "skip-restore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Run dotnet restore after code generation.",
+      "defaultValue": "false",
+      "replaces": "skip-restore",
+      "onlyIf": [
+        {
+          "after": "\"skip-restore\": \""
+        }
+      ]
+    },
+    "Basic": {
+      "type": "computed",
+      "value": "(user-choice == \"basic\")"
+    },
+    "Full": {
+      "type": "computed",
+      "value": "(user-choice == \"full\")"
+    },
+    "EntityFramework": {
+      "type": "computed",
+      "value": "(data-access == \"entityframework\")"
+    },
+    "Dapper": {
+      "type": "computed",
+      "value": "(data-access == \"dapper\")"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(Full)",
+          "exclude": []
+        },
+        {
+          "condition": "(Basic)",
+          "exclude": [
+            "Opala.Infra.EmailAdapter/**/*",
+            "Opala.Infra.NotificationAdapter/**/*",
+            "Opala.Infra.Repository/**/*"
+          ]
+        },
+        {
+          "condition": "(!EmailAdapter)",
+          "exclude": [ "Opala.Infra.EmailAdapter/**/*" ]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "path": "Opala.Core.Application/Opala.Core.Application.csproj"
+    },
+    {
+      "path": "Opala.Core.Domain/Opala.Core.Domain.csproj"
+    },
+    {
+      "path": "Opala.Core.Test/Opala.Core.Test.csproj"
+    },
+    {
+      "path": "Opala.Infra.EmailAdapter/Opala.Infra.EmailAdapter.csproj"
+    },
+    {
+      "path": "Opala.Infra.NotificationAdapter/Opala.Infra.NotificationAdapter.csproj"
+    },
+    {
+      "path": "Opala.Infra.Repository/Opala.Infra.Repository.csproj"
+    },
+    {
+      "path": "Opala.WebApi/Opala.WebApi.csproj"
+    }
+  ],
+  "postActions": [
+    {
+      "actionId": "A2735C13-29F8-4BB4-9857-F1E07C164A68",
+      "condition": "(user-choice == \"full\")",
+      "args": {
+        "primaryOutputIndexes": "0;1;2;3;4;5;6"
+      },
+      "continueOnError": true,
+      "manualInstructions": [
+        {
+          "text": "Add projects to solution."
+        }
+      ]
+    },
+    {
+      "condition": "(user-choice == \"basic\")",
+      "actionId": "A2735C13-29F8-4BB4-9857-F1E07C164A68",
+      "args": {
+        "primaryOutputIndexes": "0;1;2;6"
+      },
+      "continueOnError": true,
+      "manualInstructions": [
+        {
+          "text": "Add projects to solution."
+        }
+      ]
+    }
+  ]
+}
