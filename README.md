@@ -1,5 +1,6 @@
-# Projeto modelo baseado em Arquitetura Hexagonal
-
+![Opala](https://github.com/OleConsignado/opala/blob/master/opala.png) Opala: Arquitetura Hexagonal
+=========
+Opala é um modelo de serviço que irá ajudá-lo a criar aplicativos mais adaptáveis e de fácil manutenção utilizando como base a arquitetura hexagonal.
 
 ![Hexagonal Architecture](https://github.com/OleConsignado/otc-projectmodel/blob/master/hexagonal.png)
 
