@@ -7,4 +7,4 @@ install:
 
 script:
 - bash ./cicd.sh build
-# - bash ./cicd.sh test
+- bash ./cicd.sh test
