@@ -1,0 +1,10 @@
+language: csharp
+mono: none
+dotnet: 2.0.3
+
+install: 
+- bash ./cicd.sh install
+
+script:
+- bash ./cicd.sh build
+# - bash ./cicd.sh test
