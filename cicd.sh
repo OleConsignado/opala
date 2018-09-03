@@ -4,6 +4,7 @@ set -e
 
 CICD_COMMON_VERSION="v2.2"
 
+export CLASS_LIBRARY_PROJ_DIR=source/Opala.WebApi
 export TEST_PROJ_DIR=source/Opala.Core.Test
 
 cd $TRAVIS_BUILD_DIR
