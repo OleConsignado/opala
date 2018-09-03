@@ -13,8 +13,7 @@ A ideia deste projeto é ter uma base para a criação de Apis seguindo um model
 A estrutura do projeto está dividida em 03 (três) camadas, sendo elas: Core, Infra e Presenter.
 
 ### Core
- > Camada responsável por toda a regra de negócio.
- > Nela estão contidos os projetos de:
+Camada responsável por toda a regra de negócio. Nela estão contidos os projetos de:
 
 #### Domain: 
  > Projeto na qual são trabalhados os modelos de negócio além das interfaces de Serviços, Repositórios, Adaptadores. No projeto de domínio criamos também as classes responsável por gerenciar nossas exceções.
@@ -27,5 +26,6 @@ A estrutura do projeto está dividida em 03 (três) camadas, sendo elas: Core, I
  > Projeto responsável por manter a integridade das regras de negócio do de nosso domínio através de testes de unidade.
  
 ### Infra
- > Camada responsável por fornecer acesso aos dados hospedados dentro dos limites do domínio. Nela está a implementação real das interfaces de repositório providas pelo domínio.
- > Nela encontramos também implementação para envio de email, logs e qualquer comunicação com apis ou componentes de terceiro através de adaptadores - Adapters.
+Camada responsável por fornecer acesso aos dados hospedados dentro dos limites do domínio. Nela está a implementação real das interfaces de repositório providas pelo domínio. Nela encontramos também implementação para envio de email, logs e qualquer comunicação com apis ou componentes de terceiro através de adaptadores - Adapters.
+Nesta camada, temos os projetos de EmailAdapter, NotificationAdapter e Repository como exemplos.
+
