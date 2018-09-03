@@ -1,5 +1,7 @@
-![Opala](https://github.com/OleConsignado/opala/blob/master/opala.png) Opala: Arquitetura Hexagonal
+![Opala](https://github.com/OleConsignado/opala/blob/master/opala2.png) Opala: Arquitetura Hexagonal
 =========
+[![Build Status](https://travis-ci.org/OleConsignado/opala.svg?branch=master)](https://travis-ci.org/OleConsignado/opala)
+
 Opala é um modelo de serviço que irá ajudá-lo a criar aplicativos mais adaptáveis e de fácil manutenção utilizando como base a arquitetura hexagonal.
 
 ![Hexagonal Architecture](https://github.com/OleConsignado/otc-projectmodel/blob/master/hexagonal.png)
