@@ -328,7 +328,7 @@ namespace Opala.Core.Test
 
             var subscription = new Subscription
             {
-                ClientId = Guid.Parse("A2735C13-29F8-4BB4-9857-F1E07C164A68"),
+                ClientId = Guid.Parse("4781C571-C246-470B-9CD5-13D3D169E799"),
                 Active = true,
                 CreatedDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddDays(10),
