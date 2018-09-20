@@ -42,7 +42,7 @@ namespace Opala.Core.Application.Services
 
             await subscriptionWriteOnlyRepository.AddSubscriptionAsync(subscription);
 
-            //await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
+            await notificationAdapter.SendAsync(client.PhoneNumber, "Assinatura incluída com sucesso");
         }
 
         public async Task<IEnumerable<Subscription>> GetClientSubscriptionsAsync(Guid clientId, int page, int count)

@@ -1,0 +1,35 @@
+parentDomain: k8s01.oleconsignado.com.br
+replicaCount: 1
+image:
+  repository: oleconsignado/$$DOCKERIMAGE$$
+  tag: $$DOCKERIMAGETAG$$
+dockerRegistrationSecret: ole-docker-reg
+
+# Runtime
+ASPNETCORE_ENVIRONMENT: "Development"
+ApplicationInsights__Enabled: "false"
+TZ: "America/Sao_Paulo"
+
+# Log
+Serilog__MinimumLevel__Default: Warning
+Serilog__MinimumLevel__Override__Ole: Information
+Serilog__MinimumLevel__Override__Otc: Information
+
+# Core
+# variaveis de ambiente que afetam comportamentos de negocio
+
+# Servicos externos
+# apontamentos para servicos hospedados fora do kubernetes
+# WSAutorizador: "http://wsautorizador.oleconsignado.com.br/"
+
+# DB
+# strings de conexao com banco de dados
+
+# Credenciais
+ApplicationInsights__InstrumentationKey: "$$APPLICATIONINSIGHTSINSTRUMENTATIONKEY$$"
+
+# Recursos
+memoryRequest: "256Mi"
+cpuRequest: "100m"
+memoryLimit: "384Mi"
+cpuLimit: "400m"

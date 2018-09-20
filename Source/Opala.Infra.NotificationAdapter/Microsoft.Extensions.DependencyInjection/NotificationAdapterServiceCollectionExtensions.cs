@@ -1,6 +1,9 @@
 ﻿using Opala.Core.Domain.Adapters;
 using Opala.Infra.NotificationAdapter;
 using System;
+using Opala.Infra.NotificationAdapter.Clients;
+using Otc.Networking.Http.Client.Abstractions;
+using Refit;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,11 +12,19 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddNotificationAdapter(this IServiceCollection services, NotificationAdapterConfiguration configuration)
         {
             if (services == null)
-            {
                 throw new ArgumentNullException(nameof(services));
-            }
 
             services.AddScoped<INotificationAdapter, NotificationAdapter>();
+
+            services.AddScoped(serviceProvider =>
+            {
+                var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateHttpClient();
+                httpClient.BaseAddress = new Uri(configuration.NotificationUrl);
+
+                return RestService.For<INotificationClient>(httpClient);
+            });
+
             services.AddSingleton(configuration);
 
             return services;

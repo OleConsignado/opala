@@ -1,4 +1,4 @@
-﻿namespace Opala.Infra.NotificationAdapter
+﻿namespace Opala.Infra.NotificationAdapter.Clients
 {
     public class NotificationRequest
     {

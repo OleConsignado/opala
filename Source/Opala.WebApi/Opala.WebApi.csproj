@@ -19,19 +19,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="Graceterm" Version="1.0.5" />
+    <PackageReference Include="Graceterm" Version="1.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
-    <PackageReference Include="Otc.ExceptionHandling" Version="1.0.0-v100-alpha3-build7" />
-    <PackageReference Include="Otc.Extensions.Configuration" Version="1.0.0-v100-alpha1-build2" />
-    <PackageReference Include="Otc.Mvc.Filters" Version="1.0.0-v100-alpha3-build7" />
-    <PackageReference Include="Otc.RequestTracking.AspNetCore" Version="1.0.0-v100-alpha2-build3" />
-    <PackageReference Include="Otc.SwaggerSchemaFiltering" Version="1.0.0-v100-alpha3-build7" />
+    <PackageReference Include="Otc.AspNetCore.ApiBoot" Version="1.0.0" />
+    <PackageReference Include="Otc.ExceptionHandling" Version="2.0.0" />
+    <PackageReference Include="Otc.Extensions.Configuration" Version="2.0.1" />
+    <PackageReference Include="Otc.Mvc.Filters" Version="2.0.0" />
+    <PackageReference Include="Otc.RequestTracking.AspNetCore" Version="1.0.1" />
+    <PackageReference Include="Otc.SwaggerSchemaFiltering" Version="2.0.0" />
     <PackageReference Include="Serilog" Version="2.7.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />

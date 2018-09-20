@@ -1,65 +1,48 @@
-﻿using Newtonsoft.Json;
-using Opala.Core.Domain.Adapters;
+﻿using Opala.Core.Domain.Adapters;
 using System;
-using System.Text;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net;
 using System.Threading.Tasks;
-using Opala.Infra.NotificationAdapter.Exceptions;
+using AutoMapper;
+using Opala.Core.Domain.Exceptions;
 using Opala.Core.Domain.Models;
+using Opala.Infra.NotificationAdapter.Clients;
+using Opala.Infra.NotificationAdapter.Exceptions;
+using Refit;
 
 namespace Opala.Infra.NotificationAdapter
 {
     public class NotificationAdapter : INotificationAdapter
     {
-        private readonly NotificationAdapterConfiguration notificationAdapterConfiguration;
+        private readonly INotificationClient notificationClient;
 
-        public NotificationAdapter(NotificationAdapterConfiguration notificationAdapterConfiguration)
+        public NotificationAdapter(INotificationClient notificationClient)
         {
-            this.notificationAdapterConfiguration = notificationAdapterConfiguration ?? throw new ArgumentNullException(nameof(notificationAdapterConfiguration));
+            this.notificationClient = notificationClient ?? throw new ArgumentNullException(nameof(notificationClient));
         }
 
         public async Task<NotificationResult> SendAsync(string number, string message)
         {
-            if (number == null)
-                throw new ArgumentNullException(nameof(number));
-
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-
-            using (var client = new HttpClient())
+            NotificationRequest request = new NotificationRequest
             {
-                client.BaseAddress = new Uri(notificationAdapterConfiguration.NotificationUrl);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                Number = number,
+                Message = message
+            };
 
-                var notificationRequest = new NotificationRequest
-                {
-                    Number = number,
-                    Message = message
-                };
+            try
+            {
+                var response = await notificationClient.SendNotification(request);
 
-                var postedData = JsonConvert.SerializeObject(notificationRequest);
-                var content = new StringContent(postedData, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(@"api/Sms/EnviarSms", content);
+                var result = Mapper.Map<NotificationResponse, NotificationResult>(response);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string data = await response.Content.ReadAsStringAsync();
-                    var notificationResponse = JsonConvert.DeserializeObject<NotificationResponse>(data);
+                return result;
+            }
+            catch (ApiException e) when (e.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var e400 = e.GetContentAs<CoreExceptionDto>();
+                if (e400.TypeName == "NotificationCoreException")
+                    throw new NotificationCoreException();
 
-                    return new NotificationResult
-                    {
-                        EnvioId = notificationResponse.Id,
-                        Response = notificationResponse.Response,
-                        Status = notificationResponse.Status
-                    };
-                }
-                else
-                {
-                    string data = await response.Content.ReadAsStringAsync();
-
-                    throw new NotificationAdapterException(data, response.StatusCode);
-                }
+                throw;
             }
         }
     }

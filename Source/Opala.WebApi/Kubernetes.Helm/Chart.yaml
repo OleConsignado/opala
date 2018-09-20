@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Definicoes para $$APPNAME$$
+name: $$APPNAME$$
+version: 0.1.0
