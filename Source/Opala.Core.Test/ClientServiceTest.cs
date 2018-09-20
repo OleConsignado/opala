@@ -279,22 +279,23 @@ namespace Opala.Core.Test
 
             var client = new Client
             {
-                Name = "Lu",
-                Email = "novo@teste.com",
+                Name = "Ze",
+                Email = "ze@tabajara.com",
+                IsActive = true,
                 PhoneNumber = "31985632112",
                 Address = new Address
                 {
-                    Street = "Rua teste",
-                    Number = "100",
-                    Neighborhood = "Centro",
-                    City = "Belo Horizonte",
-                    State = "MG",
+                    Street = "Rua dos testes",
+                    Number = "42",
+                    Neighborhood = "Bairro Novo",
+                    City = "Cidade",
                     Country = "Brasil",
+                    State = "MG",
                     ZipCode = "123456"
                 }
             };
 
-            await Assert.ThrowsAsync<ModelValidationException>(() => clientService.AddClientAsync(client));
+            await Assert.ThrowsAnyAsync<ModelValidationException>(() => clientService.AddClientAsync(client));
         }
 
         [Fact]
