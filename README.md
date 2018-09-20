@@ -32,4 +32,4 @@ Camada responsável por toda a regra de negócio. Nela estão contidos os projet
 Camada responsável por fornecer acesso aos dados hospedados dentro dos limites do domínio. Nela está a implementação real das interfaces de repositório providas pelo domínio. Nela encontramos também implementação para envio de email, logs e qualquer comunicação com apis ou componentes de terceiro através de adaptadores - Adapters.
 Nesta camada, temos os projetos de EmailAdapter, NotificationAdapter e Repository como exemplos.
 
-# X
+
