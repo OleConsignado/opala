@@ -34,18 +34,15 @@ namespace Opala.WebApi.Controllers
         /// <returns>Client</returns>
         [HttpGet("{clientId}")]
         [ProducesResponseType(typeof(ClientCoreException), 400)]
-        [ProducesResponseType(typeof(ClientCoreException), 404)]
         [ProducesResponseType(typeof(GetClientResult), 200)]
         public async Task<IActionResult> GetClientAsync(Guid clientId)
         {
-            var clientResult = await clientService.GetClientAsync(clientId);
+            var client = Mapper.Map<GetClientResult>(await clientService.GetClientAsync(clientId));
 
-            if (clientResult == null)
+            if (client == null)
                 return NotFound(ClientCoreError.ClientNotFound);
 
-            var client =  Mapper.Map<GetClientResult>(clientResult);
-
-            return Ok(clientResult);
+            return Ok(client);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@
   "name": "Hexagonal Architecture for .Net Applications",
   "identity": "Opala",
   "shortName": "hexagonal",
+  "v"
   "tags": {
     "language": "C#",
     "type": "project"

@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var httpClient = httpClientFactory.CreateHttpClient();
                 httpClient.BaseAddress = new Uri(configuration.NotificationUrl);
 
-                return RestService.For<INotificationAdaptee>(httpClient);
+                return RestService.For<INotificationClient>(httpClient);
             });
 
             services.AddSingleton(configuration);

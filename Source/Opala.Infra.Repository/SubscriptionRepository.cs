@@ -42,7 +42,7 @@ namespace Opala.Infra.Repository
             var subscriptionParams = new DynamicParameters();
             subscriptionParams.Add("Id", id, DbType.Guid);
 
-            var query = @"Select Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription with (nolock) Where Id = @Id";
+            var query = @"Select Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription Where Id = @Id";
 
             var subscription = await dbConnection.QueryAsync<Subscription>(query, subscriptionParams);
 
@@ -57,8 +57,8 @@ namespace Opala.Infra.Repository
             subscriptionParams.Add("RowsPerPage", count);
 
             var query = @"Select Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From 
-                            (Select ROW_NUMBER() OVER(ORDER BY CreatedDate) AS RowNumber, Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription with (nolock) Where ClientId = @ClientId) As S
-                            Where RowNumber BETWEEN ((@PageNumber - 1) * @RowsPerPage + 1) AND (@PageNumber * @RowsPerPage)";
+                            (Select ROW_NUMBER() OVER(ORDER BY CreatedDate) AS RowNumber, Id, ClientId, Name, CreatedDate, LastUpdatedDate, ExpireDate, Active From Subscription Where ClientId = @ClientId) As S
+                          Where RowNumber BETWEEN ((@PageNumber - 1) * @RowsPerPage + 1) AND (@PageNumber * @RowsPerPage)";
 
             var subscriptions = await dbConnection.QueryAsync<Subscription>(query, subscriptionParams);
 
