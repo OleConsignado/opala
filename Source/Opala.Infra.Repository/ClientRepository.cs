@@ -51,7 +51,7 @@ namespace Opala.Infra.Repository
             var clientParams = new DynamicParameters();
             clientParams.Add("Id", clientId);
 
-            var query = @"select Id, Name, Email, PhoneNumber, IsActive, Street, Number, Neighborhood, City, State, Country, ZipCode from Client Where Id = @Id and IsActive = 1 and IsExcluded = 0";
+            var query = @"select Id, Name, Email, PhoneNumber, IsActive, Street, Number, Neighborhood, City, State, Country, ZipCode from Client with (nolock) Where Id = @Id and IsActive = 1 and IsExcluded = 0";
 
             var client = await dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
                 cli.Address = add;
@@ -69,7 +69,7 @@ namespace Opala.Infra.Repository
             var query = @"select c.Id, c.Name, c.Email, c.PhoneNumber, c.IsActive, 
                                 c.Street, c.Number, c.Neighborhood, c.City, c.State, c.Country, c.ZipCode,
                                 s.ClientId, s.Id, s.CreatedDate, s.LastUpdatedDate, s.ExpireDate, s.Active, s.Name 
-                                from Client c left join Subscription s on c.Id = s.ClientId Where c.Id = @Id and IsActive = 1 and isExcluded = 0";
+                                from Client c with (nolock) left join Subscription s with (nolock) on c.Id = s.ClientId Where c.Id = @Id and IsActive = 1 and isExcluded = 0";
 
             var subscriptions = new Dictionary<Guid, Client>();
 

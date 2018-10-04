@@ -13,11 +13,11 @@ namespace Opala.Infra.NotificationAdapter
 {
     public class NotificationAdapter : INotificationAdapter
     {
-        private readonly INotificationClient notificationClient;
+        private readonly INotificationAdaptee notificationAdaptee;
 
-        public NotificationAdapter(INotificationClient notificationClient)
+        public NotificationAdapter(INotificationAdaptee notificationAdaptee)
         {
-            this.notificationClient = notificationClient ?? throw new ArgumentNullException(nameof(notificationClient));
+            this.notificationAdaptee = notificationAdaptee ?? throw new ArgumentNullException(nameof(notificationAdaptee));
         }
 
         public async Task<NotificationResult> SendAsync(string number, string message)
@@ -30,17 +30,16 @@ namespace Opala.Infra.NotificationAdapter
 
             try
             {
-                var response = await notificationClient.SendNotification(request);
+                var response = await notificationAdaptee.SendNotification(request);
 
                 var result = Mapper.Map<NotificationResponse, NotificationResult>(response);
-
                 return result;
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.BadRequest)
             {
                 var e400 = e.GetContentAs<CoreExceptionDto>();
-                if (e400.TypeName == "NotificationCoreException")
-                    throw new NotificationCoreException();
+                if (e400.TypeName == "InvalidPhoneNumberException")
+                    throw new PhoneNumberInvalidCoreException();
 
                 throw;
             }

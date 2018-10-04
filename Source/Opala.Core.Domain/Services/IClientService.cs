@@ -30,7 +30,7 @@ namespace Opala.Core.Domain.Services
         Task AddClientAsync(Client client);
 
         /// <summary>
-        /// HAbilita ou Desabilita um Cliente
+        /// Habilita ou Desabilita um Cliente
         /// </summary>
         /// <param name="clientId">Identificador</param>
         /// <param name="isActive">true ou false</param>

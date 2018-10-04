@@ -6,7 +6,6 @@ namespace Opala.Core.Domain.Models
     {
         public Guid EnvioId { get; set; }
         public string Response { get; set; }
-        public string Status { get; set; }
         public string ErroMessage { get; set; }
     }
 }
