@@ -73,9 +73,9 @@ namespace Opala.Infra.Repository
             paymentParams.Add("SubscriptionId", subscriptionId);
 
             var query = @"select p.Id, p.SubscriptionId, p.PaidDate, p.ExpireDate, p.Total, p.TotalPaid, p.Payer, p.CardHolderName, p.CardNumber, 
-                        p.LastTransactionNumber, p.TransactionCode, p.Discriminator from Payment p 
-                        inner join Subscription s on p.SubscriptionId = s.Id 
-                        inner join Client c on s.ClientId = c.Id 
+                        p.LastTransactionNumber, p.TransactionCode, p.Discriminator from Payment p  with (nolock) 
+                        inner join Subscription s with (nolock) on p.SubscriptionId = s.Id 
+                        inner join Client c with (nolock) on s.ClientId = c.Id 
                         Where c.Id = @ClientId and s.Id = @SubscriptionId and p.Id = @Id";
 
             var reader = await dbConnection.ExecuteReaderAsync(query, paymentParams);
@@ -115,7 +115,7 @@ namespace Opala.Infra.Repository
             paymentParams.Add("ClientId", clientId);
 
             var query = @"select p.Id, p.SubscriptionId, p.PaidDate, p.ExpireDate, p.Total, p.TotalPaid, p.Payer, p.CardHolderName, p.CardNumber, p.LastTransactionNumber, p.TransactionCode, p.Discriminator 
-                        from Payment p inner join Subscription s on p.SubscriptionId = s.Id 
+                        from Payment p with (nolock) inner join Subscription s with (nolock) on p.SubscriptionId = s.Id 
                         Where s.ClientId = @ClientId and s.Id = @Id";
 
             var reader = await dbConnection.ExecuteReaderAsync(query, paymentParams);
