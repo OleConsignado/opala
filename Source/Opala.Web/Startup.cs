@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Opala.Core.Application;
+using Otc.Extensions.Configuration;
 
 namespace Opala.Web
 {
@@ -23,6 +25,8 @@ namespace Opala.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddProjectModelCoreApplication(Configuration.SafeGet<ApplicationConfiguration>());
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

@@ -6,6 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Otc.Extensions.Configuration" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Opala.Core.Application\Opala.Core.Application.csproj" />
+    <ProjectReference Include="..\Opala.Core.Domain\Opala.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

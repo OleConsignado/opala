@@ -1,6 +1,6 @@
 using System;
 
-namespace Opala.Web.Models
+namespace Opala.Web.ViewModels
 {
     public class ErrorViewModel
     {
