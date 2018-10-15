@@ -6,6 +6,6 @@ namespace Opala.Infra.NotificationAdapter.Clients
     public interface INotificationClient
     {
         [Post("/api/Sms/EnviarSms")]
-        Task<NotificationResponse> SendNotification([Body]NotificationRequest request);
+        Task<NotificationResponse> SendNotificationAsync([Body]NotificationRequest request);
     }
 }

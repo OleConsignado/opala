@@ -30,7 +30,7 @@ namespace Opala.Infra.NotificationAdapter
 
             try
             {
-                var response = await notificationClient.SendNotification(request);
+                var response = await notificationClient.SendNotificationAsync(request);
 
                 var result = Mapper.Map<NotificationResponse, NotificationResult>(response);
 
