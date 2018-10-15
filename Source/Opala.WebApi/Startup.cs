@@ -7,6 +7,7 @@ using Opala.Infra.EmailAdapter;
 using Opala.Infra.NotificationAdapter;
 using Otc.AspNetCore.ApiBoot;
 using Otc.RequestTracking.AspNetCore;
+using AutoMapper;
 
 namespace Opala.WebApi
 {
@@ -35,7 +36,7 @@ namespace Opala.WebApi
         public Startup(IConfiguration configuration) : base(configuration)
         {
             // Inicializa os mapeamentos feito com o AutoMapper
-            Mappings.Initialize();
+            Mapper.Initialize(m => m.AddProfile<WebApiAutoMapperProfile>());
         }
     }
 }
