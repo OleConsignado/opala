@@ -1,5 +1,6 @@
 ﻿using Opala.Core.Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Opala.Core.Domain.Services
@@ -52,6 +53,10 @@ namespace Opala.Core.Domain.Services
         /// <exception cref="Exceptions.ClientCoreException"></exception>
         Task RemoveClientAsync(Guid clientId);
 
-        //Todo Add HasSubscription
+        /// <summary>
+        /// Retorna uma lista de Clientes
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<Client>> GetClientsAsync();
     }
 }

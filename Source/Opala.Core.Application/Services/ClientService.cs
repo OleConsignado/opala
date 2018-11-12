@@ -6,6 +6,7 @@ using Opala.Core.Domain.Repositories;
 using Opala.Core.Domain.Services;
 using Otc.Validations.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Opala.Core.Application.Services
@@ -86,6 +87,13 @@ namespace Opala.Core.Application.Services
                 throw new ClientCoreException(ClientCoreError.ClientNotFound);
 
             await clientWriteOnlyRepository.RemoveClientAsync(clientId);
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsAsync()
+        {
+            var clients = await clientReadOnlyRepository.GetClientsAsync();
+
+            return clients;
         }
     }
 }

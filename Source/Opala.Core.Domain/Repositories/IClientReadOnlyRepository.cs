@@ -1,5 +1,6 @@
 ﻿using Opala.Core.Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Opala.Core.Domain.Repositories
@@ -12,5 +13,6 @@ namespace Opala.Core.Domain.Repositories
 
         Task<bool> ClientExistsAsync(Guid clientId);
 
+        Task<IEnumerable<Client>> GetClientsAsync();
     }
 }

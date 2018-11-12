@@ -147,5 +147,17 @@ namespace Opala.Infra.Repository
 
             await dbConnection.ExecuteScalarAsync<int>(query, clientParams);
         }
+
+        public async Task<IEnumerable<Client>> GetClientsAsync()
+        {
+            var query = @"select Id, Name, Email, PhoneNumber, IsActive, Street, Number, Neighborhood, City, State, Country, ZipCode from Client with (nolock) Where IsActive = 1 and IsExcluded = 0";
+
+            var clients = await dbConnection.QueryAsync<Client, Address, Client>(query, (cli, add) => {
+                cli.Address = add;
+                return cli;
+            }, null, splitOn: "Id,Street");
+
+            return clients;
+        }
     }
 }
