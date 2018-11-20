@@ -59,7 +59,7 @@
     <ProjectReference Include="..\Opala.Core.Application\Opala.Core.Application.csproj" />
     <ProjectReference Include="..\Opala.Core.Domain\Opala.Core.Domain.csproj" />
     <ProjectReference Include="..\Opala.Infra.EmailAdapter\Opala.Infra.EmailAdapter.csproj" />
-    <ProjectReference Include="..\Opala.Infra.NotificationAdapter\Opala.Infra.NotificationAdapter.csproj" />
+    <ProjectReference Include="..\Opala.Infra.NotificationAdapter\Opala.Infra.NotificacaoAdapter.csproj" />
     <ProjectReference Include="..\Opala.Infra.Repository\Opala.Infra.Repository.csproj" />
   </ItemGroup>
 

@@ -12,9 +12,9 @@ namespace Microsoft.Extensions.DependencyInjection
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<ISubscriptionService, SubscriptionService>();
-            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IAssinaturaService, AssinaturaService>();
+            services.AddScoped<IPagamentoService, PagamentoService>();
             services.AddSingleton(applicationConfiguration);
 
             return services;

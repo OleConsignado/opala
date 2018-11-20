@@ -7,11 +7,11 @@ namespace Opala.Core.Domain.Adapters
         /// <summary>
         /// Enviar email
         /// </summary>
-        /// <param name="to">Origem</param>
-        /// <param name="from">Destino</param>
-        /// <param name="subject">Assunto</param>
-        /// <param name="body">Mensagem</param>
+        /// <param name="origem">Origem</param>
+        /// <param name="destino">Destino</param>
+        /// <param name="assunto">Assunto</param>
+        /// <param name="mensagem">Mensagem</param>
         /// <returns></returns>
-        Task SendAsync(string to, string from, string subject, string body);
+        Task EnviaAsync(string origem, string destino, string assunto, string mensagem);
     }
 }

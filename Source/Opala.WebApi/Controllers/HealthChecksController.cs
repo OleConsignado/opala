@@ -7,7 +7,7 @@ namespace Opala.WebApi.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HealthChecksController : ControllerBase
     {
-        [HttpGet(ApplicationProperties.HealthzPath)]
+        [HttpGet("/healthz")]
         public IActionResult Healthz()
         {
             return Ok(DateTimeOffset.Now);
