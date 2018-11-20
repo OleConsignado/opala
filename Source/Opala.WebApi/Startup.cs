@@ -26,11 +26,6 @@ namespace Opala.WebApi
             services.AddProjectModelRepository(Configuration.SafeGet<RepositoryConfiguration>());
             services.AddEmailAdapter(Configuration.SafeGet<EmailAdapterConfiguration>());
             services.AddNotificationAdapter(Configuration.SafeGet<NotificacaoAdapterConfiguration>());
-            services.AddRequestTracking(requestTracker =>
-            {
-                requestTracker.Configure(Configuration.SafeGet<RequestTrackerConfiguration>());
-            });
-
         }
 
         public Startup(IConfiguration configuration) : base(configuration)
