@@ -7,21 +7,21 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
-CREATE TABLE [dbo].[Client](
+CREATE TABLE [dbo].[Cliente](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Name] [varchar](100) NOT NULL,
+	[Nome] [varchar](100) NOT NULL,
 	[Email] [varchar](150) NOT NULL,
-	[PhoneNumber] [varchar](20) NOT NULL,
-	[Street] [varchar](150) NOT NULL,
-	[Number] [varchar](10) NOT NULL,
-	[Neighborhood] [varchar](50) NOT NULL,
-	[City] [varchar](50) NOT NULL,
-	[State] [char](2) NOT NULL,
-	[Country] [varchar](30) NOT NULL,
-	[ZipCode] [char](8) NOT NULL,
-	[IsActive] [bit] NOT NULL,
-	[IsExcluded] [bit] NOT NULL,
-	[ExcludedDate] [datetimeoffset](7) NULL,
+	[Telefone] [varchar](20) NOT NULL,
+	[Rua] [varchar](150) NOT NULL,
+	[Numero] [varchar](10) NOT NULL,
+	[Bairro] [varchar](50) NOT NULL,
+	[Cidade] [varchar](50) NOT NULL,
+	[Estado] [char](2) NOT NULL,
+	[Pais] [varchar](30) NOT NULL,
+	[Cep] [char](8) NOT NULL,
+	[Ativo] [bit] NOT NULL,
+	[Excluido] [bit] NOT NULL,
+	[DataExclusao] [datetimeoffset](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -38,19 +38,19 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
-CREATE TABLE [dbo].[Payment](
+CREATE TABLE [dbo].[Pagamento](
 	[Id] [uniqueidentifier] NOT NULL,
-	[SubscriptionId] [uniqueidentifier] NOT NULL,
-	[PaidDate] [datetimeoffset](7) NOT NULL,
-	[ExpireDate] [datetimeoffset](7) NOT NULL,
+	[AssinaturaId] [uniqueidentifier] NOT NULL,
+	[DataPagamento] [datetimeoffset](7) NOT NULL,
+	[DataExpiracao] [datetimeoffset](7) NOT NULL,
 	[Total] [decimal](18, 2) NOT NULL,
-	[TotalPaid] [decimal](18, 2) NOT NULL,
-	[Payer] [varchar](50) NOT NULL,
-	[CardHolderName] [varchar](100) NULL,
-	[CardNumber] [varchar](50) NULL,
-	[LastTransactionNumber] [varchar](50) NULL,
-	[TransactionCode] [varchar](50) NULL,
-	[Discriminator] [varchar](50) NOT NULL,
+	[TotalPago] [decimal](18, 2) NOT NULL,
+	[Pagador] [varchar](50) NOT NULL,
+	[NomeCartao] [varchar](100) NULL,
+	[Numero] [varchar](50) NULL,
+	[NumeroUltimaTransacao] [varchar](50) NULL,
+	[CodigoTransacao] [varchar](50) NULL,
+	[FormaPagamento] [varchar](50) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -65,14 +65,14 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Subscription](
+CREATE TABLE [dbo].[Assinatura](
 	[Id] [uniqueidentifier] NOT NULL,
-	[ClientId] [uniqueidentifier] NOT NULL,
-	[CreatedDate] [datetime] NOT NULL,
-	[LastUpdatedDate] [datetime] NULL,
-	[ExpireDate] [datetime] NULL,
-	[Active] [bit] NOT NULL,
-	[Name] [nvarchar](100) NOT NULL,
+	[ClienteId] [uniqueidentifier] NOT NULL,
+	[DataCriacao] [datetime] NOT NULL,
+	[DataUltimaAtualizacao] [datetime] NULL,
+	[DataExpiracao] [datetime] NULL,
+	[Ativa] [bit] NOT NULL,
+	[Nome] [nvarchar](100) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

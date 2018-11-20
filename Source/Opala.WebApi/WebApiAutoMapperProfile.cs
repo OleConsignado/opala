@@ -9,19 +9,19 @@ namespace Opala.WebApi
         public WebApiAutoMapperProfile()
         {
             //Get
-            CreateMap<Client, GetClientResult>();
-            CreateMap<Address, AddClientPost.AddressPost>();
+            CreateMap<Cliente, RetornaClienteGet>();
+            CreateMap<Endereco, IncluiClientePost.EnderecoPost>();
 
             //Post
-            CreateMap<AddClientPost, Client>();
-            CreateMap<AddClientPost.AddressPost, Address>();
-            CreateMap<AddClientSubscriptionPost, Subscription>();
-            CreateMap<AddPayPalPaymentPost, PayPalPayment>();
-            CreateMap<AddCreditCardPaymentPost, CreditCardPayment>();
+            CreateMap<IncluiClientePost, Cliente>();
+            CreateMap<IncluiClientePost.EnderecoPost, Endereco>();
+            CreateMap<IncluiAssinaturaClientePost, Assinatura>();
+            CreateMap<IncluiPagamentoPayPalPost, PayPal>();
+            CreateMap<IncluiPagamentoCartaoCreditoPost, CartaoCredito>();
 
             //Put
-            CreateMap<UpdateClientPut, Client>();
-            CreateMap<UpdateClientPut.AddressPut, Address>();
+            CreateMap<AtualizaClientePut, Cliente>();
+            CreateMap<AtualizaClientePut.EnderecoPut, Endereco>();
         }
     }
 }

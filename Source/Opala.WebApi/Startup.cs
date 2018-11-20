@@ -15,8 +15,8 @@ namespace Opala.WebApi
     {
         protected override ApiMetadata ApiMetadata => new ApiMetadata()
         {
-            Name = ApplicationProperties.Name,
-            Description = ApplicationProperties.Description,
+            Name = "Projeto Modelo",
+            Description = "Projeto modelo para criação de novas Api´s",
             DefaultApiVersion = "1.0"
         };
         protected override void ConfigureApiServices(IServiceCollection services)
@@ -25,7 +25,7 @@ namespace Opala.WebApi
 
             services.AddProjectModelRepository(Configuration.SafeGet<RepositoryConfiguration>());
             services.AddEmailAdapter(Configuration.SafeGet<EmailAdapterConfiguration>());
-            services.AddNotificationAdapter(Configuration.SafeGet<NotificationAdapterConfiguration>());
+            services.AddNotificationAdapter(Configuration.SafeGet<NotificacaoAdapterConfiguration>());
             services.AddRequestTracking(requestTracker =>
             {
                 requestTracker.Configure(Configuration.SafeGet<RequestTrackerConfiguration>());

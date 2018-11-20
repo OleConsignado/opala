@@ -21,14 +21,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opala.WebApi", "Opala.WebAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opala.Infra.EmailAdapter", "Opala.Infra.EmailAdapter\Opala.Infra.EmailAdapter.csproj", "{903061B1-C610-4659-8502-9807C7ED29BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opala.Infra.NotificationAdapter", "Opala.Infra.NotificationAdapter\Opala.Infra.NotificationAdapter.csproj", "{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opala.Infra.NotificacaoAdapter", "Opala.Infra.NotificationAdapter\Opala.Infra.NotificacaoAdapter.csproj", "{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2FE3487-41D2-45B2-ACEB-B2CB1291A49A}"
 	ProjectSection(SolutionItems) = preProject
 		DbSchema.sql = DbSchema.sql
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opala.Web", "Opala.Web\Opala.Web.csproj", "{7450C69F-EACD-4328-8951-29D3626FB8ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,18 +122,6 @@ Global
 		{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}.Release|x64.Build.0 = Release|Any CPU
 		{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}.Release|x86.ActiveCfg = Release|Any CPU
 		{F2BA8518-B894-45F2-9B4F-4390E9FF4B59}.Release|x86.Build.0 = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|x64.Build.0 = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Debug|x86.Build.0 = Debug|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|x64.ActiveCfg = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|x64.Build.0 = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|x86.ActiveCfg = Release|Any CPU
-		{7450C69F-EACD-4328-8951-29D3626FB8ED}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,7 +134,6 @@ Global
 		{61675B6F-0432-424F-A20C-4AD418A39EEB} = {9FBE24C2-C788-4694-AD46-73B129E83FE2}
 		{903061B1-C610-4659-8502-9807C7ED29BF} = {17D0AA5F-1923-4D63-B57D-E3E0A0566694}
 		{F2BA8518-B894-45F2-9B4F-4390E9FF4B59} = {17D0AA5F-1923-4D63-B57D-E3E0A0566694}
-		{7450C69F-EACD-4328-8951-29D3626FB8ED} = {9FBE24C2-C788-4694-AD46-73B129E83FE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70731111-6872-4032-877A-D90346B04DC6}

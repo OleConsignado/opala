@@ -9,20 +9,20 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class NotificationAdapterServiceCollectionExtensions
     {
-        public static IServiceCollection AddNotificationAdapter(this IServiceCollection services, NotificationAdapterConfiguration configuration)
+        public static IServiceCollection AddNotificationAdapter(this IServiceCollection services, NotificacaoAdapterConfiguration configuration)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            services.AddScoped<INotificationAdapter, NotificationAdapter>();
+            services.AddScoped<INotificacaoAdapter, NotificacaoAdapter>();
 
             services.AddScoped(serviceProvider =>
             {
                 var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateHttpClient();
-                httpClient.BaseAddress = new Uri(configuration.NotificationUrl);
+                httpClient.BaseAddress = new Uri(configuration.NotificacaoUrl);
 
-                return RestService.For<INotificationClient>(httpClient);
+                return RestService.For<INotificacaoClient>(httpClient);
             });
 
             services.AddSingleton(configuration);

@@ -11,7 +11,7 @@ data:
   # Runtime
   ASPNETCORE_ENVIRONMENT: "{{ .Values.ASPNETCORE_ENVIRONMENT }}"
   ApplicationInsights__Enabled: "{{ .Values.ApplicationInsights__Enabled }}"
-    TZ: "{{ .Values.TZ }}"
+  TZ: "{{ .Values.TZ }}"
   ASPNETCORE_URLS: "http://*:80"
   LANG: "pt_BR.UTF-8"
   LANGUAGE: "pt_BR"

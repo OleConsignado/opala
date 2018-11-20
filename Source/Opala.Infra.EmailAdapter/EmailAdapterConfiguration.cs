@@ -8,13 +8,13 @@ namespace Opala.Infra.EmailAdapter
         public string Smtp { get; set; }
 
         [Required]
-        public int Port { get; set; }
+        public int Porta { get; set; }
 
-        public bool EnableSsl { get; set; }
+        public bool HabilitaSsl { get; set; }
 
         /// <summary>
         /// Put password in Base64 encode
         /// </summary>
-        public string Password { get; set; }
+        public string Senha { get; set; }
     }
 }

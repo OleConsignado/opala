@@ -8,6 +8,6 @@ namespace Opala.Core.Domain.Exceptions
         {
         }
 
-        public static readonly EmailCoreError EmailInvalidError = new EmailCoreError("400.001", "Email inválido");
+        public static readonly EmailCoreError EmailInvalido = new EmailCoreError("400.001", "Email inválido");
     }
 }

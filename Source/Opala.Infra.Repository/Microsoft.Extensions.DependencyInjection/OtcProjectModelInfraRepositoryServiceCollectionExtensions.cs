@@ -16,12 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
 
-            services.AddScoped<IClientReadOnlyRepository, ClientRepository>();
-            services.AddScoped<IClientWriteOnlyRepository, ClientRepository>();
-            services.AddScoped<ISubscriptionReadOnlyRepository, SubscriptionRepository>();
-            services.AddScoped<ISubscriptionWriteOnlyRepository, SubscriptionRepository>();
-            services.AddScoped<IPaymentReadOnlyRepository, PaymentRepository>();
-            services.AddScoped<IPaymentWriteOnlyRepository, PaymentRepository>();
+            services.AddScoped<IClienteReadOnlyRepository, ClienteRepository>();
+            services.AddScoped<IClienteWriteOnlyRepository, ClienteRepository>();
+            services.AddScoped<IAssinaturaReadOnlyRepository, AssinaturaRepository>();
+            services.AddScoped<IAssinaturaWriteOnlyRepository, AssinaturaRepository>();
+            services.AddScoped<IPagamentoReadOnlyRepository, PagamentoRepository>();
+            services.AddScoped<IPagamentoWriteOnlyRepository, PagamentoRepository>();
             services.AddSingleton(configuration);
             services.AddScoped<IDbConnection>(d =>
             {
